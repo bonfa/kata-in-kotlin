@@ -1,4 +1,4 @@
-package it.fbonfadelli.play.ground
+package it.fbonfadelli.playground
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
