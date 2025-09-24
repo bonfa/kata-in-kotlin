@@ -60,14 +60,15 @@ class MyClassTest {
         assertThat(additionOutcome).isEqualTo(AdditionOutcome.Failure)
     }
 
-    private fun anEmptyInventory(): Inventory = Inventory(mutableListOf())
+    private fun anEmptyInventory(): Inventory = Inventory(mutableMapOf())
 
     private fun anInventoryContaining(
         product1: Product,
         product2: Product
-    ): Inventory {
-        return Inventory(mutableListOf(product1, product2))
-    }
+    ): Inventory = Inventory(mutableMapOf(
+        product1.sku to product1,
+        product2.sku to product2,
+    ))
 }
 
 data class Product(
@@ -77,20 +78,17 @@ data class Product(
     val priceInEurDecimals: Int,
 )
 
-class Inventory(private val products: MutableList<Product>) {
+class Inventory(private val productsMap: MutableMap<String, Product>) {
 
-    fun add(product: Product): AdditionOutcome {
-        if (products.any { it.sku == product.sku }) {
-            return AdditionOutcome.Failure
+    fun add(product: Product): AdditionOutcome =
+        if (productsMap.containsKey(product.sku)) {
+            AdditionOutcome.Failure
         } else {
-            this.products.addFirst(product)
-            return AdditionOutcome.Success
+            this.productsMap[product.sku] = product
+            AdditionOutcome.Success
         }
-    }
 
-    fun get(sku: String): Product {
-        return products.first { it.sku == sku }
-    }
+    fun get(sku: String): Product = productsMap[sku]!!
 }
 
 sealed interface AdditionOutcome {
