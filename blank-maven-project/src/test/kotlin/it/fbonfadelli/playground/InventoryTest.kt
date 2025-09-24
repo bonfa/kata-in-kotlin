@@ -85,19 +85,6 @@ class InventoryTest {
         assertThat(retrievalOutcome).isEqualTo(RetrievalOutcome.Failure)
     }
 
-    //    @Test
-//    fun `remove existing product from inventory`() {
-//        val product1 = Product("::sku_1::", "::product_name_1::", 3, 40_00)
-//        val product2 = Product("::sku_2::", "::product_name_2::", 1, 25_00)
-//
-//        val inventory = anInventoryContaining(product1, product2)
-//
-//        val removalOutcome = inventory.remove("::sku_1")
-//
-//        assertThat(removalOutcome).isEqualTo(RemovalOutcome.Success)
-//        assertThat(inventory.get("::sku_2::")).isEqualTo(product3)
-//    }
-
     private fun anEmptyInventory(): Inventory = Inventory(mutableMapOf())
 
     private fun anInventoryContaining(
