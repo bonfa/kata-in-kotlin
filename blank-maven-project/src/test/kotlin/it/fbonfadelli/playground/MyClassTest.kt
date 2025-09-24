@@ -70,7 +70,7 @@ class Inventory(private val products: MutableList<Product>) {
     }
 
     fun get(sku: String): Product {
-        return products.first()
+        return products.first { it.sku == sku }
     }
 
 }
