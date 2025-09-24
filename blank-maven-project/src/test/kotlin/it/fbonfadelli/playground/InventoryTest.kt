@@ -3,7 +3,7 @@ package it.fbonfadelli.playground
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class MyClassTest {
+class InventoryTest {
 
     /*
      - add new product to empty inventory (sku, name, qty, price) - success [x]
