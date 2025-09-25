@@ -5,25 +5,6 @@ import org.junit.jupiter.api.Test
 
 class InventoryTest {
 
-    /*
-     - add new product to empty inventory (sku, name, qty, price) - success [x]
-     - add new product to an inventory with some elements - success [x]
-     - add existing product - failure [x]
-     - search product by sku - product found [x]
-     - search product by sku - product not found [x]
-     - contains product - true [x]
-     - contains product - false [x]
-     - remove existing product - success [x]
-     - remove not existing product - failure [x]
-     - update quantity for an existing product - success [x]
-     - remove quantity for an existing product - failure [x]
-     - compute total value of the inventory - empty [x]
-     - compute total value of the inventory - some items [x]
-
-     - search product by name (complete) - product found
-     - search product by name (complete) - product not found
-     */
-
     @Test
     fun `add new product to empty inventory`() {
         val inventory = anEmptyInventory()
@@ -182,6 +163,54 @@ class InventoryTest {
         assertThat(totalValue).isEqualTo(3 * 40_00 + 25_00)
     }
 
+    @Test
+    fun `find product by name - one product found`() {
+        val product1 = Product("::sku_1::", "::product_name_1::", 3, 40_00)
+        val product2 = Product("::sku_2::", "::product_name_2::", 1, 25_00)
+
+        val inventory: Inventory = anInventoryContaining(product1, product2)
+
+        val retrievalOutcome = inventory.retrieveProductByName("::product_name_1::")
+
+        assertThat(retrievalOutcome).containsOnly(product1)
+    }
+
+    @Test
+    fun `find product by name - more products found`() {
+        val product1 = Product("::sku_1::", "::product_name_1::", 3, 40_00)
+        val product2 = Product("::sku_2::", "::product_name_2::", 1, 25_00)
+
+        val inventory: Inventory = anInventoryContaining(product1, product2)
+
+        val retrievalOutcome = inventory.retrieveProductByName("product_name")
+
+        assertThat(retrievalOutcome).containsOnly(product1, product2)
+    }
+
+    @Test
+    fun `find product by name is case insensitive`() {
+        val product1 = Product("::sku_1::", "::product_name_1::", 3, 40_00)
+        val product2 = Product("::sku_2::", "::product_name_2::", 1, 25_00)
+
+        val inventory: Inventory = anInventoryContaining(product1, product2)
+
+        val retrievalOutcome = inventory.retrieveProductByName("PRODUCT_NAME")
+
+        assertThat(retrievalOutcome).containsOnly(product1, product2)
+    }
+
+    @Test
+    fun `find product by name - product not found`() {
+        val product1 = Product("::sku_1::", "::product_name_1::", 3, 40_00)
+        val product2 = Product("::sku_2::", "::product_name_2::", 1, 25_00)
+
+        val inventory: Inventory = anInventoryContaining(product1, product2)
+
+        val retrievalOutcome = inventory.retrieveProductByName("NOT_FOUND")
+
+        assertThat(retrievalOutcome).isEmpty()
+    }
+
     private fun anEmptyInventory(): Inventory = Inventory(mutableMapOf())
 
     private fun anInventoryContaining(
@@ -237,6 +266,9 @@ class Inventory(private val productsMap: MutableMap<String, Product>) {
 
     fun totalValue(): Long =
         productsMap.values.sumOf { it.quantity.toLong() * it.singleProductPriceInEurDecimals }
+
+    fun retrieveProductByName(toSearch: String): List<Product> =
+        productsMap.values.filter { it.name.contains(toSearch, ignoreCase = true) }
 
 }
 
