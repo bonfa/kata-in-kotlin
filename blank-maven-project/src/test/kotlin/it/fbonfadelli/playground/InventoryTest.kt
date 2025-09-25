@@ -13,9 +13,9 @@ class InventoryTest {
      - search product by sku - product not found [x]
      - contains product - true [x]
      - contains product - false [x]
+     - remove existing product - success [x]
+     - remove not existing product - failure [x]
 
-     - remove existing product - success
-     - remove not existing product - failure
      - update quantity for an exisiting product - success
      - remove quantity for an exisiting product - failure
      - compute total value of the inventory - empty
@@ -107,18 +107,32 @@ class InventoryTest {
         assertThat(inventory.contains("::sku_3::")).isFalse
     }
 
-    //    @Test
-//    fun `remove existing product`() {
-//        val product1 = Product("::sku_1::", "::product_name_1::", 3, 40_00)
-//        val product2 = Product("::sku_2::", "::product_name_2::", 1, 25_00)
-//
-//        val inventory: Inventory = anInventoryContaining(product1, product2)
-//
-//        val removalOutcome = inventory.remove("::sku_2::")
-//
-//        assertThat(removalOutcome).isEqualTo(RemovalOutcome.Success)
-//        assertThat(inventory.contains("::sku_2::")).isFalse()
-//    }
+    @Test
+    fun `remove existing product`() {
+        val product1 = Product("::sku_1::", "::product_name_1::", 3, 40_00)
+        val product2 = Product("::sku_2::", "::product_name_2::", 1, 25_00)
+
+        val inventory: Inventory = anInventoryContaining(product1, product2)
+
+        val removalOutcome = inventory.remove("::sku_2::")
+
+        assertThat(removalOutcome).isEqualTo(RemovalOutcome.Success)
+        assertThat(inventory.contains("::sku_2::")).isFalse()
+    }
+
+    @Test
+    fun `remove not existing product`() {
+        val product1 = Product("::sku_1::", "::product_name_1::", 3, 40_00)
+        val product2 = Product("::sku_2::", "::product_name_2::", 1, 25_00)
+
+        val inventory: Inventory = anInventoryContaining(product1, product2)
+        assertThat(inventory.contains("::sku_3::")).isFalse()
+
+        val removalOutcome = inventory.remove("::sku_3::")
+
+        assertThat(removalOutcome).isEqualTo(RemovalOutcome.Failure)
+        assertThat(inventory.contains("::sku_3::")).isFalse()
+    }
 
     private fun anEmptyInventory(): Inventory = Inventory(mutableMapOf())
 
@@ -157,7 +171,13 @@ class Inventory(private val productsMap: MutableMap<String, Product>) {
     fun contains(sku: String): Boolean =
         productsMap.containsKey(sku)
 
-//    fun remove(sku: String): RemovalOutcome { TODO() }
+    fun remove(sku: String): RemovalOutcome =
+        if (productsMap.containsKey(sku)) {
+            productsMap.remove(sku)
+            RemovalOutcome.Success
+        } else {
+            RemovalOutcome.Failure
+        }
 }
 
 sealed interface AdditionOutcome {
@@ -171,7 +191,7 @@ sealed interface RetrievalOutcome {
     data object Failure : RetrievalOutcome
 }
 
-//sealed interface RemovalOutcome {
-//    data object Success: RemovalOutcome
-//    data object Failure: RemovalOutcome
-//}
+sealed interface RemovalOutcome {
+    data object Success: RemovalOutcome
+    data object Failure: RemovalOutcome
+}
