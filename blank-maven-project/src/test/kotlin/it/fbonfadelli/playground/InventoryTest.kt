@@ -15,9 +15,9 @@ class InventoryTest {
      - contains product - false [x]
      - remove existing product - success [x]
      - remove not existing product - failure [x]
+     - update quantity for an existing product - success [x]
+     - remove quantity for an existing product - failure [x]
 
-     - update quantity for an exisiting product - success
-     - remove quantity for an exisiting product - failure
      - compute total value of the inventory - empty
      - compute total value of the inventory - some items
      - search product by name (complete) - product found
@@ -134,15 +134,44 @@ class InventoryTest {
         assertThat(inventory.contains("::sku_3::")).isFalse()
     }
 
+    @Test
+    fun `update quantity for existing product`() {
+        val product1 = Product("::sku_1::", "::product_name_1::", 3, 40_00)
+        val product2 = Product("::sku_2::", "::product_name_2::", 1, 25_00)
+
+        val inventory: Inventory = anInventoryContaining(product1, product2)
+
+        val updateOutcome = inventory.updateQuantity("::sku_2::", 10)
+
+        assertThat(updateOutcome).isEqualTo(UpdateOutcome.Success)
+        assertThat(inventory.retrieve("::sku_2::")).satisfies({ retrievalOutcome: RetrievalOutcome ->
+            assertThat(retrievalOutcome).isInstanceOf(RetrievalOutcome.Success::class.java)
+            assertThat((retrievalOutcome as RetrievalOutcome.Success).product.quantity).isEqualTo(10)
+        })
+    }
+
+    @Test
+    fun `update quantity for not existing product`() {
+        val product1 = Product("::sku_1::", "::product_name_1::", 3, 40_00)
+        val product2 = Product("::sku_2::", "::product_name_2::", 1, 25_00)
+
+        val inventory: Inventory = anInventoryContaining(product1, product2)
+
+        val updateOutcome = inventory.updateQuantity("::sku_3::", 10)
+        assertThat(updateOutcome).isEqualTo(UpdateOutcome.Failure)
+    }
+
     private fun anEmptyInventory(): Inventory = Inventory(mutableMapOf())
 
     private fun anInventoryContaining(
         product1: Product,
         product2: Product
-    ): Inventory = Inventory(mutableMapOf(
-        product1.sku to product1,
-        product2.sku to product2,
-    ))
+    ): Inventory = Inventory(
+        mutableMapOf(
+            product1.sku to product1,
+            product2.sku to product2,
+        )
+    )
 }
 
 data class Product(
@@ -153,7 +182,6 @@ data class Product(
 )
 
 class Inventory(private val productsMap: MutableMap<String, Product>) {
-
     fun add(product: Product): AdditionOutcome =
         if (productsMap.containsKey(product.sku)) {
             AdditionOutcome.Failure
@@ -178,6 +206,14 @@ class Inventory(private val productsMap: MutableMap<String, Product>) {
         } else {
             RemovalOutcome.Failure
         }
+
+    fun updateQuantity(sku: String, newQuantity: Int): UpdateOutcome =
+        if (productsMap.containsKey(sku)) {
+            productsMap[sku] = productsMap[sku]!!.copy(quantity = newQuantity)
+            UpdateOutcome.Success
+        } else
+            UpdateOutcome.Failure
+
 }
 
 sealed interface AdditionOutcome {
@@ -192,6 +228,11 @@ sealed interface RetrievalOutcome {
 }
 
 sealed interface RemovalOutcome {
-    data object Success: RemovalOutcome
-    data object Failure: RemovalOutcome
+    data object Success : RemovalOutcome
+    data object Failure : RemovalOutcome
+}
+
+sealed interface UpdateOutcome {
+    data object Success : UpdateOutcome
+    data object Failure : UpdateOutcome
 }
