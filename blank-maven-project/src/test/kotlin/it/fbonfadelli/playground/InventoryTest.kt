@@ -9,33 +9,33 @@ class InventoryTest {
     fun `add new product to empty inventory`() {
         val inventory = anEmptyInventory()
 
-        val product = Product("::sku::", "::product_name::", 3, 40_00)
+        val product = Product(Sku("::sku::"), "::product_name::", 3, 40_00)
 
         val additionOutcome = inventory.add(product)
 
         assertThat(additionOutcome).isEqualTo(AdditionOutcome.Success)
-        assertThat(inventory.retrieve("::sku::")).isEqualTo(RetrievalOutcome.Success(product))
+        assertThat(inventory.retrieve(Sku("::sku::"))).isEqualTo(RetrievalOutcome.Success(product))
     }
 
     @Test
     fun `add new product to inventory with some elements`() {
-        val product1 = Product("::sku_1::", "::product_name_1::", 3, 40_00)
-        val product2 = Product("::sku_2::", "::product_name_2::", 1, 25_00)
+        val product1 = Product(Sku("::sku_1::"), "::product_name_1::", 3, 40_00)
+        val product2 = Product(Sku("::sku_2::"), "::product_name_2::", 1, 25_00)
 
         val inventory = anInventoryContaining(product1, product2)
 
-        val product3 = Product("::sku_3::", "::product_name_3::", 15, 100_00)
+        val product3 = Product(Sku("::sku_3::"), "::product_name_3::", 15, 100_00)
 
         val additionOutcome = inventory.add(product3)
 
         assertThat(additionOutcome).isEqualTo(AdditionOutcome.Success)
-        assertThat(inventory.retrieve("::sku_3::")).isEqualTo(RetrievalOutcome.Success(product3))
+        assertThat(inventory.retrieve(Sku("::sku_3::"))).isEqualTo(RetrievalOutcome.Success(product3))
     }
 
     @Test
     fun `add already existing product to inventory`() {
-        val product1 = Product("::sku_1::", "::product_name_1::", 3, 40_00)
-        val product2 = Product("::sku_2::", "::product_name_2::", 1, 25_00)
+        val product1 = Product(Sku("::sku_1::"), "::product_name_1::", 3, 40_00)
+        val product2 = Product(Sku("::sku_2::"), "::product_name_2::", 1, 25_00)
 
         val inventory = anInventoryContaining(product1, product2)
 
@@ -46,86 +46,86 @@ class InventoryTest {
 
     @Test
     fun `retrieve existing product`() {
-        val product1 = Product("::sku_1::", "::product_name_1::", 3, 40_00)
-        val product2 = Product("::sku_2::", "::product_name_2::", 1, 25_00)
+        val product1 = Product(Sku("::sku_1::"), "::product_name_1::", 3, 40_00)
+        val product2 = Product(Sku("::sku_2::"), "::product_name_2::", 1, 25_00)
 
         val inventory = anInventoryContaining(product1, product2)
 
-        val retrievalOutcome = inventory.retrieve("::sku_2::")
+        val retrievalOutcome = inventory.retrieve(Sku("::sku_2::"))
 
         assertThat(retrievalOutcome).isEqualTo(RetrievalOutcome.Success(product2))
     }
 
     @Test
     fun `retrieve not existing product`() {
-        val product1 = Product("::sku_1::", "::product_name_1::", 3, 40_00)
-        val product2 = Product("::sku_2::", "::product_name_2::", 1, 25_00)
+        val product1 = Product(Sku("::sku_1::"), "::product_name_1::", 3, 40_00)
+        val product2 = Product(Sku("::sku_2::"), "::product_name_2::", 1, 25_00)
 
         val inventory = anInventoryContaining(product1, product2)
 
-        val retrievalOutcome = inventory.retrieve("::sku_3::")
+        val retrievalOutcome = inventory.retrieve(Sku("::sku_3::"))
 
         assertThat(retrievalOutcome).isEqualTo(RetrievalOutcome.Failure)
     }
 
     @Test
     fun `contains product`() {
-        val product1 = Product("::sku_1::", "::product_name_1::", 3, 40_00)
-        val product2 = Product("::sku_2::", "::product_name_2::", 1, 25_00)
+        val product1 = Product(Sku("::sku_1::"), "::product_name_1::", 3, 40_00)
+        val product2 = Product(Sku("::sku_2::"), "::product_name_2::", 1, 25_00)
 
         val inventory = anInventoryContaining(product1, product2)
 
-        assertThat(inventory.contains("::sku_1::")).isTrue
+        assertThat(inventory.contains(Sku("::sku_1::"))).isTrue
     }
 
     @Test
     fun `does not contain product`() {
-        val product1 = Product("::sku_1::", "::product_name_1::", 3, 40_00)
-        val product2 = Product("::sku_2::", "::product_name_2::", 1, 25_00)
+        val product1 = Product(Sku("::sku_1::"), "::product_name_1::", 3, 40_00)
+        val product2 = Product(Sku("::sku_2::"), "::product_name_2::", 1, 25_00)
 
         val inventory = anInventoryContaining(product1, product2)
 
-        assertThat(inventory.contains("::sku_3::")).isFalse
+        assertThat(inventory.contains(Sku("::sku_3::"))).isFalse
     }
 
     @Test
     fun `remove existing product`() {
-        val product1 = Product("::sku_1::", "::product_name_1::", 3, 40_00)
-        val product2 = Product("::sku_2::", "::product_name_2::", 1, 25_00)
+        val product1 = Product(Sku("::sku_1::"), "::product_name_1::", 3, 40_00)
+        val product2 = Product(Sku("::sku_2::"), "::product_name_2::", 1, 25_00)
 
         val inventory: Inventory = anInventoryContaining(product1, product2)
 
-        val removalOutcome = inventory.remove("::sku_2::")
+        val removalOutcome = inventory.remove(Sku("::sku_2::"))
 
         assertThat(removalOutcome).isEqualTo(RemovalOutcome.Success)
-        assertThat(inventory.contains("::sku_2::")).isFalse()
+        assertThat(inventory.contains(Sku("::sku_2::"))).isFalse()
     }
 
     @Test
     fun `remove not existing product`() {
-        val product1 = Product("::sku_1::", "::product_name_1::", 3, 40_00)
-        val product2 = Product("::sku_2::", "::product_name_2::", 1, 25_00)
+        val product1 = Product(Sku("::sku_1::"), "::product_name_1::", 3, 40_00)
+        val product2 = Product(Sku("::sku_2::"), "::product_name_2::", 1, 25_00)
 
         val inventory: Inventory = anInventoryContaining(product1, product2)
-        assertThat(inventory.contains("::sku_3::")).isFalse()
+        assertThat(inventory.contains(Sku("::sku_3::"))).isFalse()
 
-        val removalOutcome = inventory.remove("::sku_3::")
+        val removalOutcome = inventory.remove(Sku("::sku_3::"))
 
         assertThat(removalOutcome).isEqualTo(RemovalOutcome.Failure)
-        assertThat(inventory.contains("::sku_3::")).isFalse()
+        assertThat(inventory.contains(Sku("::sku_3::"))).isFalse()
     }
 
     @Test
     fun `update quantity for existing product`() {
-        val product1 = Product("::sku_1::", "::product_name_1::", 3, 40_00)
-        val product2 = Product("::sku_2::", "::product_name_2::", 1, 25_00)
+        val product1 = Product(Sku("::sku_1::"), "::product_name_1::", 3, 40_00)
+        val product2 = Product(Sku("::sku_2::"), "::product_name_2::", 1, 25_00)
 
         val inventory: Inventory = anInventoryContaining(product1, product2)
 
-        val updateOutcome = inventory.updateQuantity("::sku_2::", 10)
+        val updateOutcome = inventory.updateQuantity(Sku("::sku_2::"), 10)
 
         assertThat(updateOutcome).isEqualTo(UpdateOutcome.Success)
-        assertThat(inventory.retrieve("::sku_2::")).satisfies({ retrievalOutcome: RetrievalOutcome ->
+        assertThat(inventory.retrieve(Sku("::sku_2::"))).satisfies({ retrievalOutcome: RetrievalOutcome ->
             assertThat(retrievalOutcome).isInstanceOf(RetrievalOutcome.Success::class.java)
             assertThat((retrievalOutcome as RetrievalOutcome.Success).product.quantity).isEqualTo(10)
         })
@@ -133,12 +133,12 @@ class InventoryTest {
 
     @Test
     fun `update quantity for not existing product`() {
-        val product1 = Product("::sku_1::", "::product_name_1::", 3, 40_00)
-        val product2 = Product("::sku_2::", "::product_name_2::", 1, 25_00)
+        val product1 = Product(Sku("::sku_1::"), "::product_name_1::", 3, 40_00)
+        val product2 = Product(Sku("::sku_2::"), "::product_name_2::", 1, 25_00)
 
         val inventory: Inventory = anInventoryContaining(product1, product2)
 
-        val updateOutcome = inventory.updateQuantity("::sku_3::", 10)
+        val updateOutcome = inventory.updateQuantity(Sku("::sku_3::"), 10)
         assertThat(updateOutcome).isEqualTo(UpdateOutcome.Failure)
     }
 
@@ -153,8 +153,8 @@ class InventoryTest {
 
     @Test
     fun `total value of an inventory with some items`() {
-        val product1 = Product("::sku_1::", "::product_name_1::", 3, 40_00)
-        val product2 = Product("::sku_2::", "::product_name_2::", 1, 25_00)
+        val product1 = Product(Sku("::sku_1::"), "::product_name_1::", 3, 40_00)
+        val product2 = Product(Sku("::sku_2::"), "::product_name_2::", 1, 25_00)
 
         val inventory: Inventory = anInventoryContaining(product1, product2)
 
@@ -165,8 +165,8 @@ class InventoryTest {
 
     @Test
     fun `find product by name - one product found`() {
-        val product1 = Product("::sku_1::", "::product_name_1::", 3, 40_00)
-        val product2 = Product("::sku_2::", "::product_name_2::", 1, 25_00)
+        val product1 = Product(Sku("::sku_1::"), "::product_name_1::", 3, 40_00)
+        val product2 = Product(Sku("::sku_2::"), "::product_name_2::", 1, 25_00)
 
         val inventory: Inventory = anInventoryContaining(product1, product2)
 
@@ -177,8 +177,8 @@ class InventoryTest {
 
     @Test
     fun `find product by name - more products found`() {
-        val product1 = Product("::sku_1::", "::product_name_1::", 3, 40_00)
-        val product2 = Product("::sku_2::", "::product_name_2::", 1, 25_00)
+        val product1 = Product(Sku("::sku_1::"), "::product_name_1::", 3, 40_00)
+        val product2 = Product(Sku("::sku_2::"), "::product_name_2::", 1, 25_00)
 
         val inventory: Inventory = anInventoryContaining(product1, product2)
 
@@ -189,8 +189,8 @@ class InventoryTest {
 
     @Test
     fun `find product by name is case insensitive`() {
-        val product1 = Product("::sku_1::", "::product_name_1::", 3, 40_00)
-        val product2 = Product("::sku_2::", "::product_name_2::", 1, 25_00)
+        val product1 = Product(Sku("::sku_1::"), "::product_name_1::", 3, 40_00)
+        val product2 = Product(Sku("::sku_2::"), "::product_name_2::", 1, 25_00)
 
         val inventory: Inventory = anInventoryContaining(product1, product2)
 
@@ -201,8 +201,8 @@ class InventoryTest {
 
     @Test
     fun `find product by name - product not found`() {
-        val product1 = Product("::sku_1::", "::product_name_1::", 3, 40_00)
-        val product2 = Product("::sku_2::", "::product_name_2::", 1, 25_00)
+        val product1 = Product(Sku("::sku_1::"), "::product_name_1::", 3, 40_00)
+        val product2 = Product(Sku("::sku_2::"), "::product_name_2::", 1, 25_00)
 
         val inventory: Inventory = anInventoryContaining(product1, product2)
 
@@ -225,13 +225,15 @@ class InventoryTest {
 }
 
 data class Product(
-    val sku: String,
+    val sku: Sku,
     val name: String,
     val quantity: Int,
     val singleProductPriceInEurDecimals: Int,
 )
 
-class Inventory(private val productsMap: MutableMap<String, Product>) {
+data class Sku(val value: String)
+
+class Inventory(private val productsMap: MutableMap<Sku, Product>) {
     fun add(product: Product): AdditionOutcome =
         if (productsMap.containsKey(product.sku)) {
             AdditionOutcome.Failure
@@ -240,16 +242,16 @@ class Inventory(private val productsMap: MutableMap<String, Product>) {
             AdditionOutcome.Success
         }
 
-    fun retrieve(sku: String): RetrievalOutcome =
+    fun retrieve(sku: Sku): RetrievalOutcome =
         if (productsMap.containsKey(sku))
             RetrievalOutcome.Success(productsMap[sku]!!)
         else
             RetrievalOutcome.Failure
 
-    fun contains(sku: String): Boolean =
+    fun contains(sku: Sku): Boolean =
         productsMap.containsKey(sku)
 
-    fun remove(sku: String): RemovalOutcome =
+    fun remove(sku: Sku): RemovalOutcome =
         if (productsMap.containsKey(sku)) {
             productsMap.remove(sku)
             RemovalOutcome.Success
@@ -257,7 +259,7 @@ class Inventory(private val productsMap: MutableMap<String, Product>) {
             RemovalOutcome.Failure
         }
 
-    fun updateQuantity(sku: String, newQuantity: Int): UpdateOutcome =
+    fun updateQuantity(sku: Sku, newQuantity: Int): UpdateOutcome =
         if (productsMap.containsKey(sku)) {
             productsMap[sku] = productsMap[sku]!!.copy(quantity = newQuantity)
             UpdateOutcome.Success
@@ -278,8 +280,7 @@ sealed interface AdditionOutcome {
 }
 
 sealed interface RetrievalOutcome {
-    @JvmInline
-    value class Success(val product: Product) : RetrievalOutcome
+    data class Success(val product: Product) : RetrievalOutcome
     data object Failure : RetrievalOutcome
 }
 
