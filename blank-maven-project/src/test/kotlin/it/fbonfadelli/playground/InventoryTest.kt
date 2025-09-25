@@ -17,9 +17,9 @@ class InventoryTest {
      - remove not existing product - failure [x]
      - update quantity for an existing product - success [x]
      - remove quantity for an existing product - failure [x]
+     - compute total value of the inventory - empty [x]
+     - compute total value of the inventory - some items [x]
 
-     - compute total value of the inventory - empty
-     - compute total value of the inventory - some items
      - search product by name (complete) - product found
      - search product by name (complete) - product not found
      */
@@ -161,6 +161,27 @@ class InventoryTest {
         assertThat(updateOutcome).isEqualTo(UpdateOutcome.Failure)
     }
 
+    @Test
+    fun `compute total value of an empty inventory`() {
+        val inventory: Inventory = anEmptyInventory()
+
+        val totalValue = inventory.totalValue()
+
+        assertThat(totalValue).isEqualTo(0L)
+    }
+
+    @Test
+    fun `total value of an inventory with some items`() {
+        val product1 = Product("::sku_1::", "::product_name_1::", 3, 40_00)
+        val product2 = Product("::sku_2::", "::product_name_2::", 1, 25_00)
+
+        val inventory: Inventory = anInventoryContaining(product1, product2)
+
+        val totalValue = inventory.totalValue()
+
+        assertThat(totalValue).isEqualTo(3 * 40_00 + 25_00)
+    }
+
     private fun anEmptyInventory(): Inventory = Inventory(mutableMapOf())
 
     private fun anInventoryContaining(
@@ -178,7 +199,7 @@ data class Product(
     val sku: String,
     val name: String,
     val quantity: Int,
-    val priceInEurDecimals: Int,
+    val singleProductPriceInEurDecimals: Int,
 )
 
 class Inventory(private val productsMap: MutableMap<String, Product>) {
@@ -213,6 +234,9 @@ class Inventory(private val productsMap: MutableMap<String, Product>) {
             UpdateOutcome.Success
         } else
             UpdateOutcome.Failure
+
+    fun totalValue(): Long =
+        productsMap.values.sumOf { it.quantity.toLong() * it.singleProductPriceInEurDecimals }
 
 }
 
