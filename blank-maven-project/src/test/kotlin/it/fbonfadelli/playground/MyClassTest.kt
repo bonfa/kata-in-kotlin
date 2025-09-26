@@ -1,7 +1,11 @@
 package it.fbonfadelli.playground
 
-import org.assertj.core.api.Assertions.assertThat
+import io.mockk.Called
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
 import org.junit.jupiter.api.Test
+import java.time.LocalDate
 
 class MyClassTest {
 
@@ -25,8 +29,38 @@ class MyClassTest {
     - friends list contain some friends - two are born today - send message to those two users
     */
 
+    private val friendsLoader = mockk<FriendsLoader>()
+    private val greetingSender = mockk<GreetingSender>()
+    private val birthDayGreetings = BirthDayGreetings(friendsLoader, greetingSender)
+
+
     @Test
-    fun `my first test`() {
-        assertThat(true).isTrue
+    fun `friend list is empty`() {
+        every { friendsLoader.getAll() } returns emptyList()
+
+        birthDayGreetings.execute()
+
+        verify { greetingSender wasNot Called }
     }
 }
+
+class BirthDayGreetings(
+    friendsLoader: FriendsLoader,
+    greetingSender: GreetingSender
+) {
+    fun execute() {
+    }
+}
+
+interface FriendsLoader {
+    fun getAll(): List<Friend>
+}
+
+class Friend(
+    val firstName: String,
+    val lastName: String,
+    val dateOfBirth: LocalDate,
+    val email: String,
+)
+
+interface GreetingSender
