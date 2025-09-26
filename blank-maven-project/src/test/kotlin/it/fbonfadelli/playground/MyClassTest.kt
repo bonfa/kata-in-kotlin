@@ -9,7 +9,11 @@ class MyClassTest {
     private val currentDateProvider = mockk<CurrentDateProvider>()
     private val friendsRepository = mockk<FriendsRepository>()
     private val greetingSender = mockk<GreetingSender>()
-    private val birthDayGreetings = BirthDayGreetings(friendsRepository, greetingSender, currentDateProvider)
+    private val birthDayGreetings = BirthDayGreetings(
+        friendsRepository = friendsRepository,
+        greetingSender = greetingSender,
+        currentDateProvider = currentDateProvider
+    )
 
     @Test
     fun `friend list is empty`() {
