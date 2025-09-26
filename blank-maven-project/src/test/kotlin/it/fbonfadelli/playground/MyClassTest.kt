@@ -170,17 +170,15 @@ class BirthDayGreetings(
     private val currentDateProvider: CurrentDateProvider
 ) {
     fun execute() {
+        val currentDate = currentDateProvider.get()
+
         friendsLoader.getAll()
-            .filter { isBirthday(it) }
+            .filter { it.hasBirthdayOn(currentDate) }
             .forEach { greetingSender.sendGreetingsTo(it) }
     }
 
-    private fun isBirthday(friend: Friend): Boolean {
-        val currentDate = currentDateProvider.get()
-        val dateOfBirth = friend.dateOfBirth
-
-        return dateOfBirth.month == currentDate.month && dateOfBirth.dayOfMonth == currentDate.dayOfMonth
-    }
+    private fun Friend.hasBirthdayOn(date: LocalDate): Boolean =
+        this.dateOfBirth.month == date.month && this.dateOfBirth.dayOfMonth == date.dayOfMonth
 }
 
 interface FriendsLoader {
