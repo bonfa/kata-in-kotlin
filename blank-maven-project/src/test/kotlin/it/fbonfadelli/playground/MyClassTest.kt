@@ -48,7 +48,7 @@ class MyClassTest {
     }
 
     @Test
-    fun `friends list contain one friend who is born today`() {
+    fun `friends contain one friend who is born today`() {
         val friend = aFriendWith(dateOfBirth = LocalDate.of(2000, 10, 20))
 
         every { friendsLoader.getAll() } returns listOf(friend)
@@ -61,7 +61,7 @@ class MyClassTest {
     }
 
     @Test
-    fun `friends list contain one friend whose birthday is not today`() {
+    fun `friends contain one friend whose birthday is not today`() {
         val friend = aFriendWith(dateOfBirth = LocalDate.of(2000, 10, 20))
 
         every { friendsLoader.getAll() } returns listOf(friend)
@@ -73,7 +73,7 @@ class MyClassTest {
     }
 
     @Test
-    fun `friends list contain one friend whose birthday is today but was not born today`() {
+    fun `friends contain one friend whose birthday is today but was not born today`() {
         val friend = aFriendWith(dateOfBirth = LocalDate.of(2000, 10, 20))
 
         every { friendsLoader.getAll() } returns listOf(friend)
