@@ -27,9 +27,9 @@ class MyClassTest {
     - additional checks on the date - same month, different day - not birthday [x]
     - additional checks on the date - different month, same day - not birthday [x]
 
-    - friends list contain some friends - none is born today - no messages are sent
-    - friends list contain some friends - one is born today - send message to specific user
-    - friends list contain some friends - two are born today - send message to those two users
+    - friends list contain some friends - none is born today - no messages are sent [x]
+    - friends list contain some friends - one is born today - send message to specific user [x]
+    - friends list contain some friends - two are born today - send message to those two users [x]
     */
 
     private val currentDateProvider = mockk<CurrentDateProvider>()
@@ -109,6 +109,52 @@ class MyClassTest {
         verify { greetingSender wasNot Called }
     }
 
+    @Test
+    fun `friends contain more than one friend, one has birthday today`() {
+        val friend1 = aFriendWith(dateOfBirth = LocalDate.of(2000, 10, 20))
+        val friend2 = aFriendWith(dateOfBirth = LocalDate.of(2001, 3, 4))
+        val friend3 = aFriendWith(dateOfBirth = LocalDate.of(2000, 6, 19))
+
+        every { friendsLoader.getAll() } returns listOf(friend1, friend2, friend3)
+        every { currentDateProvider.get() } returns LocalDate.of(2025, 6, 19)
+        justRun { greetingSender.sendGreetingsTo(friend3) }
+
+        birthDayGreetings.execute()
+
+        verify { greetingSender.sendGreetingsTo(friend3) }
+    }
+
+    @Test
+    fun `friends contain more than one friend, but no one has birthday today`() {
+        val friend1 = aFriendWith(dateOfBirth = LocalDate.of(2000, 10, 20))
+        val friend2 = aFriendWith(dateOfBirth = LocalDate.of(2001, 3, 4))
+        val friend3 = aFriendWith(dateOfBirth = LocalDate.of(2000, 6, 19))
+
+        every { friendsLoader.getAll() } returns listOf(friend1, friend2, friend3)
+        every { currentDateProvider.get() } returns LocalDate.of(2025, 9, 20)
+
+        birthDayGreetings.execute()
+
+        verify { greetingSender wasNot Called }
+    }
+
+    @Test
+    fun `friends contain more than one friend, more than one friend has birthday today`() {
+        val friend1 = aFriendWith(dateOfBirth = LocalDate.of(2000, 10, 20))
+        val friend2 = aFriendWith(dateOfBirth = LocalDate.of(2001, 6, 19))
+        val friend3 = aFriendWith(dateOfBirth = LocalDate.of(2000, 6, 19))
+
+        every { friendsLoader.getAll() } returns listOf(friend1, friend2, friend3)
+        every { currentDateProvider.get() } returns LocalDate.of(2025, 6, 19)
+        justRun { greetingSender.sendGreetingsTo(friend2) }
+        justRun { greetingSender.sendGreetingsTo(friend3) }
+
+        birthDayGreetings.execute()
+
+        verify { greetingSender.sendGreetingsTo(friend2) }
+        verify { greetingSender.sendGreetingsTo(friend3) }
+    }
+
     private fun aFriendWith(dateOfBirth: LocalDate): Friend =
         Friend(
             firstName = "::first_name::",
@@ -116,8 +162,6 @@ class MyClassTest {
             dateOfBirth = dateOfBirth,
             email = "::an_email::"
         )
-
-
 }
 
 class BirthDayGreetings(
@@ -130,10 +174,9 @@ class BirthDayGreetings(
 
         if (friends.isNotEmpty()) {
 
-            val friend = friends.first()
-
-            if (isBirthday(friend))
-                greetingSender.sendGreetingsTo(friend)
+            friends
+                .filter { isBirthday(it) }
+                .forEach { greetingSender.sendGreetingsTo(it) }
         }
     }
 
