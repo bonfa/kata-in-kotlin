@@ -4,12 +4,13 @@ import io.mockk.*
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 
-class MyClassTest {
+class BirthdayGreetingsTest {
 
     private val currentDateProvider = mockk<CurrentDateProvider>()
     private val friendsRepository = mockk<FriendsRepository>()
     private val greetingSender = mockk<GreetingSender>()
-    private val birthDayGreetings = BirthDayGreetings(
+
+    private val birthDayGreetings = BirthdayGreetings(
         friendsRepository = friendsRepository,
         greetingSender = greetingSender,
         currentDateProvider = currentDateProvider
@@ -18,6 +19,7 @@ class MyClassTest {
     @Test
     fun `friend list is empty`() {
         every { friendsRepository.retrieveAllFriends() } returns emptyList()
+        every { currentDateProvider.get() } returns LocalDate.of(2000, 10, 20)
 
         birthDayGreetings.execute()
 
@@ -141,38 +143,3 @@ class MyClassTest {
         )
 }
 
-class BirthDayGreetings(
-    private val friendsRepository: FriendsRepository,
-    private val greetingSender: GreetingSender,
-    private val currentDateProvider: CurrentDateProvider
-) {
-    fun execute() {
-        val currentDate = currentDateProvider.get()
-
-        friendsRepository.retrieveAllFriends()
-            .filter { it.hasBirthdayOn(currentDate) }
-            .forEach { greetingSender.sendGreetingsTo(it) }
-    }
-
-    private fun Friend.hasBirthdayOn(date: LocalDate): Boolean =
-        this.dateOfBirth.month == date.month && this.dateOfBirth.dayOfMonth == date.dayOfMonth
-}
-
-interface FriendsRepository {
-    fun retrieveAllFriends(): List<Friend>
-}
-
-class Friend(
-    val firstName: String,
-    val lastName: String,
-    val dateOfBirth: LocalDate,
-    val email: String,
-)
-
-interface CurrentDateProvider {
-    fun get(): LocalDate
-}
-
-interface GreetingSender {
-    fun sendGreetingsTo(friend: Friend)
-}
