@@ -6,32 +6,6 @@ import java.time.LocalDate
 
 class MyClassTest {
 
-    /*
-    - read the user data from somewhere
-    - check whether today it is the birthday of a user or not (with edge cases)
-    - for the users which have their birthdays today, send the message
-     */
-
-    /*
-    - mock - source of data
-    - keep the logic
-    - mock - message sender
-    - mock - current date provider
-    */
-
-    /*
-    - friends list is empty - no message are sent [x]
-    - friends list contain one friend - that friend is born today - the message is sent [x]
-    - friends list contain one friend - that friend is not born today - the message is sent [x]
-    - friends list contain one friend - that friend's birthday is today - the message is sent [x]
-    - additional checks on the date - same month, different day - not birthday [x]
-    - additional checks on the date - different month, same day - not birthday [x]
-
-    - friends list contain some friends - none is born today - no messages are sent [x]
-    - friends list contain some friends - one is born today - send message to specific user [x]
-    - friends list contain some friends - two are born today - send message to those two users [x]
-    */
-
     private val currentDateProvider = mockk<CurrentDateProvider>()
     private val friendsLoader = mockk<FriendsLoader>()
     private val greetingSender = mockk<GreetingSender>()
