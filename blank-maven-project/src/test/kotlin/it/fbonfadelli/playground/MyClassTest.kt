@@ -49,7 +49,7 @@ class MyClassTest {
 
     @Test
     fun `friends list contain one friend who is born today`() {
-        val friend = Friend("::first_name::", "::last_name::", LocalDate.of(2000, 10, 20), "::an_email::")
+        val friend = aFriendWith(dateOfBirth = LocalDate.of(2000, 10, 20))
 
         every { friendsLoader.getAll() } returns listOf(friend)
         every { currentDateProvider.get() } returns LocalDate.of(2000, 10, 20)
@@ -62,7 +62,7 @@ class MyClassTest {
 
     @Test
     fun `friends list contain one friend whose birthday is not today`() {
-        val friend = Friend("::first_name::", "::last_name::", LocalDate.of(2000, 10, 20), "::an_email::")
+        val friend = aFriendWith(dateOfBirth = LocalDate.of(2000, 10, 20))
 
         every { friendsLoader.getAll() } returns listOf(friend)
         every { currentDateProvider.get() } returns LocalDate.of(2025, 10, 29)
@@ -74,7 +74,7 @@ class MyClassTest {
 
     @Test
     fun `friends list contain one friend whose birthday is today but was not born today`() {
-        val friend = Friend("::first_name::", "::last_name::", LocalDate.of(2000, 10, 20), "::an_email::")
+        val friend = aFriendWith(dateOfBirth = LocalDate.of(2000, 10, 20))
 
         every { friendsLoader.getAll() } returns listOf(friend)
         every { currentDateProvider.get() } returns LocalDate.of(2025, 10, 20)
@@ -84,6 +84,14 @@ class MyClassTest {
 
         verify { greetingSender.sendGreetingsTo(friend) }
     }
+
+    private fun aFriendWith(dateOfBirth: LocalDate): Friend =
+        Friend(
+            firstName = "::first_name::",
+            lastName = "::last_name::",
+            dateOfBirth = dateOfBirth,
+            email = "::an_email::"
+        )
 
 
 }
