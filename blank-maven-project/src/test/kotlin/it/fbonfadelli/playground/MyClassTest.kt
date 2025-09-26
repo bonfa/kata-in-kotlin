@@ -23,7 +23,8 @@ class MyClassTest {
     */
 
     /*
-    - friends list is empty - no message are sent
+    - friends list is empty - no message are sent [x]
+    - friends list contain one friend - that friend is born today - the message is sent
     - friends list contain some friends - none is born today - no messages are sent
     - friends list contain some friends - one is born today - send message to specific user
     - friends list contain some friends - two are born today - send message to those two users
@@ -42,6 +43,8 @@ class MyClassTest {
 
         verify { greetingSender wasNot Called }
     }
+
+
 }
 
 class BirthDayGreetings(
