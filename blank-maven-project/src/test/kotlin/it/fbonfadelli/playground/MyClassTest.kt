@@ -170,14 +170,9 @@ class BirthDayGreetings(
     private val currentDateProvider: CurrentDateProvider
 ) {
     fun execute() {
-        val friends = friendsLoader.getAll()
-
-        if (friends.isNotEmpty()) {
-
-            friends
-                .filter { isBirthday(it) }
-                .forEach { greetingSender.sendGreetingsTo(it) }
-        }
+        friendsLoader.getAll()
+            .filter { isBirthday(it) }
+            .forEach { greetingSender.sendGreetingsTo(it) }
     }
 
     private fun isBirthday(friend: Friend): Boolean {
