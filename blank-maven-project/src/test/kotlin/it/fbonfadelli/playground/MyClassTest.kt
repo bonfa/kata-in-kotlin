@@ -24,8 +24,8 @@ class MyClassTest {
     - friends list contain one friend - that friend is born today - the message is sent [x]
     - friends list contain one friend - that friend is not born today - the message is sent [x]
     - friends list contain one friend - that friend's birthday is today - the message is sent [x]
-    - additional checks on the date - same month, different day - not birthday
-    - additional checks on the date - different month, same day - not birthday
+    - additional checks on the date - same month, different day - not birthday [x]
+    - additional checks on the date - different month, same day - not birthday [x]
 
     - friends list contain some friends - none is born today - no messages are sent
     - friends list contain some friends - one is born today - send message to specific user
@@ -65,7 +65,7 @@ class MyClassTest {
         val friend = aFriendWith(dateOfBirth = LocalDate.of(2000, 10, 20))
 
         every { friendsLoader.getAll() } returns listOf(friend)
-        every { currentDateProvider.get() } returns LocalDate.of(2025, 10, 29)
+        every { currentDateProvider.get() } returns LocalDate.of(2025, 9, 29)
 
         birthDayGreetings.execute()
 
@@ -83,6 +83,30 @@ class MyClassTest {
         birthDayGreetings.execute()
 
         verify { greetingSender.sendGreetingsTo(friend) }
+    }
+
+    @Test
+    fun `additional checks on the date - same month, different day - not birthday`() {
+        val friend = aFriendWith(dateOfBirth = LocalDate.of(2000, 10, 20))
+
+        every { friendsLoader.getAll() } returns listOf(friend)
+        every { currentDateProvider.get() } returns LocalDate.of(2025, 10, 21)
+
+        birthDayGreetings.execute()
+
+        verify { greetingSender wasNot Called }
+    }
+
+    @Test
+    fun `additional checks on the date - different month, same day - not birthday`() {
+        val friend = aFriendWith(dateOfBirth = LocalDate.of(2000, 10, 20))
+
+        every { friendsLoader.getAll() } returns listOf(friend)
+        every { currentDateProvider.get() } returns LocalDate.of(2025, 9, 20)
+
+        birthDayGreetings.execute()
+
+        verify { greetingSender wasNot Called }
     }
 
     private fun aFriendWith(dateOfBirth: LocalDate): Friend =
