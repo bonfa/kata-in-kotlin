@@ -24,6 +24,8 @@ class MyClassTest {
     - friends list contain one friend - that friend is born today - the message is sent [x]
     - friends list contain one friend - that friend is not born today - the message is sent [x]
     - friends list contain one friend - that friend's birthday is today - the message is sent [x]
+    - additional checks on the date - same month, different day - not birthday
+    - additional checks on the date - different month, same day - not birthday
 
     - friends list contain some friends - none is born today - no messages are sent
     - friends list contain some friends - one is born today - send message to specific user
@@ -82,6 +84,8 @@ class MyClassTest {
 
         verify { greetingSender.sendGreetingsTo(friend) }
     }
+
+
 }
 
 class BirthDayGreetings(
@@ -96,12 +100,12 @@ class BirthDayGreetings(
 
             val friend = friends.first()
 
-            if (isBirthDay(friend))
+            if (isBirthday(friend))
                 greetingSender.sendGreetingsTo(friend)
         }
     }
 
-    private fun isBirthDay(friend: Friend): Boolean {
+    private fun isBirthday(friend: Friend): Boolean {
         val currentDate = currentDateProvider.get()
         val dateOfBirth = friend.dateOfBirth
 
