@@ -7,14 +7,13 @@ import java.time.LocalDate
 class MyClassTest {
 
     private val currentDateProvider = mockk<CurrentDateProvider>()
-    private val friendsLoader = mockk<FriendsLoader>()
+    private val friendsRepository = mockk<FriendsRepository>()
     private val greetingSender = mockk<GreetingSender>()
-    private val birthDayGreetings = BirthDayGreetings(friendsLoader, greetingSender, currentDateProvider)
-
+    private val birthDayGreetings = BirthDayGreetings(friendsRepository, greetingSender, currentDateProvider)
 
     @Test
     fun `friend list is empty`() {
-        every { friendsLoader.getAll() } returns emptyList()
+        every { friendsRepository.retrieveAllFriends() } returns emptyList()
 
         birthDayGreetings.execute()
 
@@ -25,7 +24,7 @@ class MyClassTest {
     fun `friends contain one friend who is born today`() {
         val friend = aFriendWith(dateOfBirth = LocalDate.of(2000, 10, 20))
 
-        every { friendsLoader.getAll() } returns listOf(friend)
+        every { friendsRepository.retrieveAllFriends() } returns listOf(friend)
         every { currentDateProvider.get() } returns LocalDate.of(2000, 10, 20)
         justRun { greetingSender.sendGreetingsTo(friend) }
 
@@ -38,7 +37,7 @@ class MyClassTest {
     fun `friends contain one friend whose birthday is not today`() {
         val friend = aFriendWith(dateOfBirth = LocalDate.of(2000, 10, 20))
 
-        every { friendsLoader.getAll() } returns listOf(friend)
+        every { friendsRepository.retrieveAllFriends() } returns listOf(friend)
         every { currentDateProvider.get() } returns LocalDate.of(2025, 9, 29)
 
         birthDayGreetings.execute()
@@ -50,7 +49,7 @@ class MyClassTest {
     fun `friends contain one friend whose birthday is today but was not born today`() {
         val friend = aFriendWith(dateOfBirth = LocalDate.of(2000, 10, 20))
 
-        every { friendsLoader.getAll() } returns listOf(friend)
+        every { friendsRepository.retrieveAllFriends() } returns listOf(friend)
         every { currentDateProvider.get() } returns LocalDate.of(2025, 10, 20)
         justRun { greetingSender.sendGreetingsTo(friend) }
 
@@ -63,7 +62,7 @@ class MyClassTest {
     fun `additional checks on the date - same month, different day - not birthday`() {
         val friend = aFriendWith(dateOfBirth = LocalDate.of(2000, 10, 20))
 
-        every { friendsLoader.getAll() } returns listOf(friend)
+        every { friendsRepository.retrieveAllFriends() } returns listOf(friend)
         every { currentDateProvider.get() } returns LocalDate.of(2025, 10, 21)
 
         birthDayGreetings.execute()
@@ -75,7 +74,7 @@ class MyClassTest {
     fun `additional checks on the date - different month, same day - not birthday`() {
         val friend = aFriendWith(dateOfBirth = LocalDate.of(2000, 10, 20))
 
-        every { friendsLoader.getAll() } returns listOf(friend)
+        every { friendsRepository.retrieveAllFriends() } returns listOf(friend)
         every { currentDateProvider.get() } returns LocalDate.of(2025, 9, 20)
 
         birthDayGreetings.execute()
@@ -89,7 +88,7 @@ class MyClassTest {
         val friend2 = aFriendWith(dateOfBirth = LocalDate.of(2001, 3, 4))
         val friend3 = aFriendWith(dateOfBirth = LocalDate.of(2000, 6, 19))
 
-        every { friendsLoader.getAll() } returns listOf(friend1, friend2, friend3)
+        every { friendsRepository.retrieveAllFriends() } returns listOf(friend1, friend2, friend3)
         every { currentDateProvider.get() } returns LocalDate.of(2025, 6, 19)
         justRun { greetingSender.sendGreetingsTo(friend3) }
 
@@ -104,7 +103,7 @@ class MyClassTest {
         val friend2 = aFriendWith(dateOfBirth = LocalDate.of(2001, 3, 4))
         val friend3 = aFriendWith(dateOfBirth = LocalDate.of(2000, 6, 19))
 
-        every { friendsLoader.getAll() } returns listOf(friend1, friend2, friend3)
+        every { friendsRepository.retrieveAllFriends() } returns listOf(friend1, friend2, friend3)
         every { currentDateProvider.get() } returns LocalDate.of(2025, 9, 20)
 
         birthDayGreetings.execute()
@@ -118,7 +117,7 @@ class MyClassTest {
         val friend2 = aFriendWith(dateOfBirth = LocalDate.of(2001, 6, 19))
         val friend3 = aFriendWith(dateOfBirth = LocalDate.of(2000, 6, 19))
 
-        every { friendsLoader.getAll() } returns listOf(friend1, friend2, friend3)
+        every { friendsRepository.retrieveAllFriends() } returns listOf(friend1, friend2, friend3)
         every { currentDateProvider.get() } returns LocalDate.of(2025, 6, 19)
         justRun { greetingSender.sendGreetingsTo(friend2) }
         justRun { greetingSender.sendGreetingsTo(friend3) }
@@ -139,14 +138,14 @@ class MyClassTest {
 }
 
 class BirthDayGreetings(
-    private val friendsLoader: FriendsLoader,
+    private val friendsRepository: FriendsRepository,
     private val greetingSender: GreetingSender,
     private val currentDateProvider: CurrentDateProvider
 ) {
     fun execute() {
         val currentDate = currentDateProvider.get()
 
-        friendsLoader.getAll()
+        friendsRepository.retrieveAllFriends()
             .filter { it.hasBirthdayOn(currentDate) }
             .forEach { greetingSender.sendGreetingsTo(it) }
     }
@@ -155,8 +154,8 @@ class BirthDayGreetings(
         this.dateOfBirth.month == date.month && this.dateOfBirth.dayOfMonth == date.dayOfMonth
 }
 
-interface FriendsLoader {
-    fun getAll(): List<Friend>
+interface FriendsRepository {
+    fun retrieveAllFriends(): List<Friend>
 }
 
 class Friend(
