@@ -13,6 +13,21 @@ class BirthdayGreetings(
         friendsRepository.retrieveAllFriends()
             .filter { it.hasBirthdayOn(currentDate) }
             .forEach { greetingSender.sendGreetingsTo(it) }
+
+        /*
+            WHAT ABOUT
+            {
+                val currentDate = currentDateProvider.get()
+
+                val friends = friendsRepository.retrieveAllFriendsHavingBirthdayOn(currentDate)
+
+                if (friends.isNotEmpty() {
+                    greetingSender.sendGreetingsTo(friends)
+                }
+            }
+            ?
+        */
+
     }
 
     private fun Friend.hasBirthdayOn(date: LocalDate): Boolean =
