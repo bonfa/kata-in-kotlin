@@ -1,4 +1,4 @@
-package it.fbonfadelli.playground
+package it.fbonfadelli.playground.bowling
 
 sealed interface Frame {
     fun getFirstRollScore(): Int

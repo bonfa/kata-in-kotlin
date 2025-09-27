@@ -1,7 +1,8 @@
-package it.fbonfadelli.playground
+package it.fbonfadelli.playground.bowling
 
-class BowlingGame(private val frames: List<Frame>) {
-    fun totalScore(): Int {
+object BowlingGame {
+
+    fun totalScore(frames: List<Frame>): Int {
         var totalScore = 0
         for (i in 0 until frames.size) {
             totalScore += when (val frame = frames[i]) {
@@ -13,4 +14,5 @@ class BowlingGame(private val frames: List<Frame>) {
         }
         return totalScore
     }
+
 }

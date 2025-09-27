@@ -1,0 +1,93 @@
+package it.fbonfadelli.playground.bowling
+
+import org.assertj.core.api.Assertions
+import org.junit.jupiter.api.Test
+
+class BowlingTest {
+
+    private val bowling = Bowling(BowlingGame, FrameAdapter)
+
+    @Test
+    fun `many rolls - not spare nor strike`() {
+        val totalScore = bowling.totalScore(listOf(3, 4, 5, 4, 2, 4))
+
+        Assertions.assertThat(totalScore).isEqualTo(22)
+    }
+
+    @Test
+    fun `a strike on the last roll`() {
+        val totalScore = bowling.totalScore(listOf(1, 9, 10))
+
+        Assertions.assertThat(totalScore).isEqualTo(20)
+    }
+
+    @Test
+    fun `a strike on a frame which is not the last one`() {
+        val totalScore = bowling.totalScore(listOf(10, 4, 5, 0, 0))
+
+        Assertions.assertThat(totalScore).isEqualTo(28)
+    }
+
+    @Test
+    fun `a spare on a frame which is not the last one`() {
+        val totalScore = bowling.totalScore(listOf(3, 7, 9, 0))
+
+        Assertions.assertThat(totalScore).isEqualTo(28)
+    }
+
+    @Test
+    fun `a spare is valid only within a frame and not for every coule of values which have sum = 10`() {
+        val totalScore = bowling.totalScore(listOf(3, 7, 3, 4))
+
+        Assertions.assertThat(totalScore).isEqualTo(20)
+    }
+
+    @Test
+    fun `last frame - strike on the first roll`() {
+        val totalScore = bowling.totalScore(listOf(10, 3, 4))
+
+        Assertions.assertThat(totalScore).isEqualTo(17)
+    }
+
+    @Test
+    fun `last frame - strike on the first and the second roll`() {
+        val totalScore = bowling.totalScore(listOf(10, 10, 4))
+
+        Assertions.assertThat(totalScore).isEqualTo(24)
+    }
+
+    @Test
+    fun `last frame - strike on the first and the second roll - other values`() {
+        val totalScore = bowling.totalScore(listOf(10, 0, 4))
+
+        Assertions.assertThat(totalScore).isEqualTo(14)
+    }
+
+    @Test
+    fun `last frame - spare on the second roll`() {
+        val totalScore = bowling.totalScore(listOf(4, 6, 3))
+
+        Assertions.assertThat(totalScore).isEqualTo(13)
+    }
+
+    @Test
+    fun `acceptance 1 - all strikes`() {
+        val totalScore = bowling.totalScore(listOf(10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10))
+
+        Assertions.assertThat(totalScore).isEqualTo(300)
+    }
+
+    @Test
+    fun `acceptance 2 - no spares nor strikes`() {
+        val totalScore = bowling.totalScore(listOf(9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0))
+
+        Assertions.assertThat(totalScore).isEqualTo(90)
+    }
+
+    @Test
+    fun `acceptance 3 - all spares and five as last roll`() {
+        val totalScore = bowling.totalScore(listOf(5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5))
+
+        Assertions.assertThat(totalScore).isEqualTo(150)
+    }
+}

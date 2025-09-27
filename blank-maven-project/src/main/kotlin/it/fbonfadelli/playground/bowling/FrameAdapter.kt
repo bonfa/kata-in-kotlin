@@ -1,12 +1,7 @@
-package it.fbonfadelli.playground
+package it.fbonfadelli.playground.bowling
 
-class Bowling(private val rollScores: List<Int>) {
-
-    fun totalScore(): Int {
-        return BowlingGame(createFrames(rollScores)).totalScore()
-    }
-
-    private fun createFrames(rollScores: List<Int>): List<Frame> {
+object FrameAdapter {
+    fun rollScoresToFrames(rollScores: List<Int>): List<Frame> {
         val frames = mutableListOf<Frame>()
 
         var i = 0
