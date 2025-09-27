@@ -5,18 +5,6 @@ import org.junit.jupiter.api.Test
 
 class MyClassTest {
 
-    /*
-    - 3
-    - 3 4, 5 3 - no spare no strikes
-    - 3 4, 4 / 7 - spare on last frame
-    - 3 4, X 3 4 - strike on last frame
-    - 3 /, 3 4 - spare on not last frame
-    - X  , 3 5 - strike on not last frame
-    - all strikes
-    - all spares
-    - no spares nor strikes
-     */
-
     @Test
     fun `single roll`() {
         val bowling = Bowling(listOf(3))
@@ -98,10 +86,20 @@ class MyClassTest {
         assertThat(totalScore).isEqualTo(28)
     }
 
-    //3,7,3,4
+    @Test
+    fun `a spare is valid only within a frame and not for every coule of values which have sum = 10`() {
+        val bowling = Bowling(listOf(3, 7, 3, 4))
+
+        val totalScore = bowling.totalScore()
+
+        assertThat(totalScore).isEqualTo(20)
+    }
 }
 
 class Bowling(private val rollScores: List<Int>) {
+
+    private var isNewFrame = true
+
     fun totalScore(): Int {
         var totalScore = 0
         for (i in 0 until rollScores.size) {
@@ -113,19 +111,23 @@ class Bowling(private val rollScores: List<Int>) {
     private fun currentFrameScore(rollPosition: Int): Int =
         when {
             isStrike(rollScoreAt(rollPosition)) -> {
+                isNewFrame = true
                 rollScoreAt(rollPosition) + rollScoreAt(rollPosition + 1) + rollScoreAt(rollPosition + 2)
             }
 
             isSpare(rollPosition, rollScoreAt(rollPosition)) -> {
+                isNewFrame = !isNewFrame
                 rollScoreAt(rollPosition) + rollScoreAt(rollPosition + 1)
             }
 
             else -> {
+                isNewFrame = !isNewFrame
                 rollScoreAt(rollPosition)
             }
         }
 
-    private fun isSpare(i: Int, currentRollScore: Int): Boolean = rollScoreAt(i - 1) + currentRollScore == 10
+    private fun isSpare(i: Int, currentRollScore: Int): Boolean =
+        !isNewFrame && rollScoreAt(i - 1) + currentRollScore == 10
 
     private fun isStrike(roll: Int): Boolean = roll == 10
 
