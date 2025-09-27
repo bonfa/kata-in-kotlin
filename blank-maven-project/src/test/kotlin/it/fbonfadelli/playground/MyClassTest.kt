@@ -54,8 +54,8 @@ class MyClassTest {
     }
 
     @Test
-    fun `a spare on the last roll`() {
-        val bowling = Bowling(listOf(1, 2, 3, 7))
+    fun `a strike on the last roll`() {
+        val bowling = Bowling(listOf(1, 2, 10))
 
         val totalScore = bowling.totalScore()
 
@@ -89,16 +89,15 @@ class Bowling(private val rollScores: List<Int>) {
 
             totalScore += currentRollScore
 
-            if (isStrike(currentRollScore) && i + 1 < rollScores.size) {
-                totalScore += rollScores[i + 1]
-            }
-
-            if (isStrike(currentRollScore) && i + 2 < rollScores.size) {
-                totalScore += rollScores[i + 2]
+            if (isStrike(currentRollScore)) {
+                totalScore += rollScoreAt(i + 1) + rollScoreAt(i + 2)
             }
         }
         return totalScore
     }
 
     private fun isStrike(roll: Int): Boolean = roll == 10
+
+    private fun rollScoreAt(position: Int): Int =
+        rollScores.getOrNull(position) ?: 0
 }
