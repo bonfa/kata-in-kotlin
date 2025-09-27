@@ -1,7 +1,6 @@
 package it.fbonfadelli.playground.codecracker
 
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 class DecryptorTest {
@@ -37,21 +36,29 @@ class DecryptorTest {
     }
 
     @Test
-    @Disabled
     fun `a message of two characters`() {
-        TODO("Not yet implemented")
+        val decryptor = Decryptor()
+        val key = "bcdefghijklmnopqrstuvwxyza"
+
+        val decrypted = decryptor.decrypt("bc", key)
+
+        assertThat(decrypted).isEqualTo("ab")
     }
 
     @Test
-    @Disabled
     fun `a message of many characters`() {
-        TODO("Not yet implemented")
+        val decryptor = Decryptor()
+        val key = "bcdefghijklmnopqrstuvwxyza"
+
+        val decrypted = decryptor.decrypt("bcccbcddc", key)
+
+        assertThat(decrypted).isEqualTo("abbbabccb")
     }
 }
 
 class Decryptor {
-    fun decrypt(message: String, key: String): String {
-        return if (message.isEmpty()) "" else if (message == "b") "a" else "b"
-    }
-
+    fun decrypt(message: String, key: String): String =
+        message
+            .map { char -> ('a'.code + key.indexOf(char)).toChar() }
+            .joinToString("")
 }
