@@ -55,10 +55,3 @@ class DecryptorTest {
         assertThat(decrypted).isEqualTo("abbbabccb")
     }
 }
-
-class Decryptor {
-    fun decrypt(message: String, key: String): String =
-        message
-            .map { char -> ('a'.code + key.indexOf(char)).toChar() }
-            .joinToString("")
-}
