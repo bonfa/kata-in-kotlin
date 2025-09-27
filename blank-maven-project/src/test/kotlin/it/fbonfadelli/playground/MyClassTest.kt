@@ -105,21 +105,27 @@ class Bowling(private val rollScores: List<Int>) {
     fun totalScore(): Int {
         var totalScore = 0
         for (i in 0 until rollScores.size) {
-            val currentRollScore = rollScores[i]
-
-            totalScore += currentRollScore
-
-            if (isStrike(currentRollScore)) {
-                totalScore += rollScoreAt(i + 1) + rollScoreAt(i + 2)
-            } else {
-                val prevScore = rollScoreAt(i - 1)
-                if (prevScore + currentRollScore == 10) {
-                    totalScore += rollScoreAt(i + 1)
-                }
-            }
+            totalScore += currentFrameScore(i)
         }
         return totalScore
     }
+
+    private fun currentFrameScore(rollPosition: Int): Int =
+        when {
+            isStrike(rollScoreAt(rollPosition)) -> {
+                rollScoreAt(rollPosition) + rollScoreAt(rollPosition + 1) + rollScoreAt(rollPosition + 2)
+            }
+
+            isSpare(rollPosition, rollScoreAt(rollPosition)) -> {
+                rollScoreAt(rollPosition) + rollScoreAt(rollPosition + 1)
+            }
+
+            else -> {
+                rollScoreAt(rollPosition)
+            }
+        }
+
+    private fun isSpare(i: Int, currentRollScore: Int): Boolean = rollScoreAt(i - 1) + currentRollScore == 10
 
     private fun isStrike(roll: Int): Boolean = roll == 10
 
