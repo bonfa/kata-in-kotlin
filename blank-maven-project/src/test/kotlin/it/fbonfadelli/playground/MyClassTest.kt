@@ -81,18 +81,20 @@ class MyClassTest {
     }
 }
 
-class Bowling(private val rolls: List<Int>) {
+class Bowling(private val rollScores: List<Int>) {
     fun totalScore(): Int {
         var totalScore = 0
-        for (i in 0 until rolls.size) {
-            val currentRoll = rolls[i]
+        for (i in 0 until rollScores.size) {
+            val currentRollScore = rollScores[i]
 
-            if (isStrike(currentRoll) && i + 1 < rolls.size && i + 2 < rolls.size) {
-                totalScore += currentRoll + rolls[i + 1] + rolls[i + 2]
-            } else if (isStrike(currentRoll) && i + 1 < rolls.size) {
-                totalScore += currentRoll + rolls[i + 1]
-            } else {
-                totalScore += currentRoll
+            totalScore += currentRollScore
+
+            if (isStrike(currentRollScore) && i + 1 < rollScores.size) {
+                totalScore += rollScores[i + 1]
+            }
+
+            if (isStrike(currentRollScore) && i + 2 < rollScores.size) {
+                totalScore += rollScores[i + 2]
             }
         }
         return totalScore
