@@ -1,4 +1,4 @@
-package it.fbonfadelli.playground
+package it.fbonfadelli.playground.inventory
 
 data class Product(
     val sku: Sku,

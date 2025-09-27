@@ -1,6 +1,6 @@
-package it.fbonfadelli.playground
+package it.fbonfadelli.playground.inventory
 
-import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
 
 class InventoryTest {
@@ -13,8 +13,8 @@ class InventoryTest {
 
         val additionOutcome = inventory.add(product)
 
-        assertThat(additionOutcome).isEqualTo(AdditionOutcome.Success)
-        assertThat(inventory.retrieve(Sku("::sku::"))).isEqualTo(RetrievalOutcome.Success(product))
+        Assertions.assertThat(additionOutcome).isEqualTo(AdditionOutcome.Success)
+        Assertions.assertThat(inventory.retrieve(Sku("::sku::"))).isEqualTo(RetrievalOutcome.Success(product))
     }
 
     @Test
@@ -28,8 +28,8 @@ class InventoryTest {
 
         val additionOutcome = inventory.add(product3)
 
-        assertThat(additionOutcome).isEqualTo(AdditionOutcome.Success)
-        assertThat(inventory.retrieve(Sku("::sku_3::"))).isEqualTo(RetrievalOutcome.Success(product3))
+        Assertions.assertThat(additionOutcome).isEqualTo(AdditionOutcome.Success)
+        Assertions.assertThat(inventory.retrieve(Sku("::sku_3::"))).isEqualTo(RetrievalOutcome.Success(product3))
     }
 
     @Test
@@ -41,7 +41,7 @@ class InventoryTest {
 
         val additionOutcome = inventory.add(product2)
 
-        assertThat(additionOutcome).isEqualTo(AdditionOutcome.Failure)
+        Assertions.assertThat(additionOutcome).isEqualTo(AdditionOutcome.Failure)
     }
 
     @Test
@@ -53,7 +53,7 @@ class InventoryTest {
 
         val retrievalOutcome = inventory.retrieve(Sku("::sku_2::"))
 
-        assertThat(retrievalOutcome).isEqualTo(RetrievalOutcome.Success(product2))
+        Assertions.assertThat(retrievalOutcome).isEqualTo(RetrievalOutcome.Success(product2))
     }
 
     @Test
@@ -65,7 +65,7 @@ class InventoryTest {
 
         val retrievalOutcome = inventory.retrieve(Sku("::sku_3::"))
 
-        assertThat(retrievalOutcome).isEqualTo(RetrievalOutcome.Failure)
+        Assertions.assertThat(retrievalOutcome).isEqualTo(RetrievalOutcome.Failure)
     }
 
     @Test
@@ -75,7 +75,7 @@ class InventoryTest {
 
         val inventory = anInventoryContaining(product1, product2)
 
-        assertThat(inventory.contains(Sku("::sku_1::"))).isTrue
+        Assertions.assertThat(inventory.contains(Sku("::sku_1::"))).isTrue
     }
 
     @Test
@@ -85,7 +85,7 @@ class InventoryTest {
 
         val inventory = anInventoryContaining(product1, product2)
 
-        assertThat(inventory.contains(Sku("::sku_3::"))).isFalse
+        Assertions.assertThat(inventory.contains(Sku("::sku_3::"))).isFalse
     }
 
     @Test
@@ -97,8 +97,8 @@ class InventoryTest {
 
         val removalOutcome = inventory.remove(Sku("::sku_2::"))
 
-        assertThat(removalOutcome).isEqualTo(RemovalOutcome.Success)
-        assertThat(inventory.contains(Sku("::sku_2::"))).isFalse()
+        Assertions.assertThat(removalOutcome).isEqualTo(RemovalOutcome.Success)
+        Assertions.assertThat(inventory.contains(Sku("::sku_2::"))).isFalse()
     }
 
     @Test
@@ -107,12 +107,12 @@ class InventoryTest {
         val product2 = Product(Sku("::sku_2::"), "::product_name_2::", 1, 25_00)
 
         val inventory: Inventory = anInventoryContaining(product1, product2)
-        assertThat(inventory.contains(Sku("::sku_3::"))).isFalse()
+        Assertions.assertThat(inventory.contains(Sku("::sku_3::"))).isFalse()
 
         val removalOutcome = inventory.remove(Sku("::sku_3::"))
 
-        assertThat(removalOutcome).isEqualTo(RemovalOutcome.Failure)
-        assertThat(inventory.contains(Sku("::sku_3::"))).isFalse()
+        Assertions.assertThat(removalOutcome).isEqualTo(RemovalOutcome.Failure)
+        Assertions.assertThat(inventory.contains(Sku("::sku_3::"))).isFalse()
     }
 
     @Test
@@ -124,10 +124,10 @@ class InventoryTest {
 
         val updateOutcome = inventory.updateQuantity(Sku("::sku_2::"), 10)
 
-        assertThat(updateOutcome).isEqualTo(UpdateOutcome.Success)
-        assertThat(inventory.retrieve(Sku("::sku_2::"))).satisfies({ retrievalOutcome: RetrievalOutcome ->
-            assertThat(retrievalOutcome).isInstanceOf(RetrievalOutcome.Success::class.java)
-            assertThat((retrievalOutcome as RetrievalOutcome.Success).product.quantity).isEqualTo(10)
+        Assertions.assertThat(updateOutcome).isEqualTo(UpdateOutcome.Success)
+        Assertions.assertThat(inventory.retrieve(Sku("::sku_2::"))).satisfies({ retrievalOutcome: RetrievalOutcome ->
+            Assertions.assertThat(retrievalOutcome).isInstanceOf(RetrievalOutcome.Success::class.java)
+            Assertions.assertThat((retrievalOutcome as RetrievalOutcome.Success).product.quantity).isEqualTo(10)
         })
     }
 
@@ -139,7 +139,7 @@ class InventoryTest {
         val inventory: Inventory = anInventoryContaining(product1, product2)
 
         val updateOutcome = inventory.updateQuantity(Sku("::sku_3::"), 10)
-        assertThat(updateOutcome).isEqualTo(UpdateOutcome.Failure)
+        Assertions.assertThat(updateOutcome).isEqualTo(UpdateOutcome.Failure)
     }
 
     @Test
@@ -148,7 +148,7 @@ class InventoryTest {
 
         val totalValue = inventory.totalValue()
 
-        assertThat(totalValue).isEqualTo(0L)
+        Assertions.assertThat(totalValue).isEqualTo(0L)
     }
 
     @Test
@@ -160,7 +160,7 @@ class InventoryTest {
 
         val totalValue = inventory.totalValue()
 
-        assertThat(totalValue).isEqualTo(3 * 40_00 + 25_00)
+        Assertions.assertThat(totalValue).isEqualTo(3 * 40_00 + 25_00)
     }
 
     @Test
@@ -172,7 +172,7 @@ class InventoryTest {
 
         val retrievalOutcome = inventory.retrieveProductByName("::product_name_1::")
 
-        assertThat(retrievalOutcome).containsOnly(product1)
+        Assertions.assertThat(retrievalOutcome).containsOnly(product1)
     }
 
     @Test
@@ -184,7 +184,7 @@ class InventoryTest {
 
         val retrievalOutcome = inventory.retrieveProductByName("product_name")
 
-        assertThat(retrievalOutcome).containsOnly(product1, product2)
+        Assertions.assertThat(retrievalOutcome).containsOnly(product1, product2)
     }
 
     @Test
@@ -196,7 +196,7 @@ class InventoryTest {
 
         val retrievalOutcome = inventory.retrieveProductByName("PRODUCT_NAME")
 
-        assertThat(retrievalOutcome).containsOnly(product1, product2)
+        Assertions.assertThat(retrievalOutcome).containsOnly(product1, product2)
     }
 
     @Test
@@ -208,7 +208,7 @@ class InventoryTest {
 
         val retrievalOutcome = inventory.retrieveProductByName("NOT_FOUND")
 
-        assertThat(retrievalOutcome).isEmpty()
+        Assertions.assertThat(retrievalOutcome).isEmpty()
     }
 
     private fun anEmptyInventory(): Inventory = Inventory(mutableMapOf())

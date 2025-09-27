@@ -1,4 +1,4 @@
-package it.fbonfadelli.playground
+package it.fbonfadelli.playground.inventory
 
 class Inventory(private val productsMap: MutableMap<Sku, Product>) {
     fun add(product: Product): AdditionOutcome =
