@@ -51,35 +51,17 @@ class MyClassTest {
     }
 
     @Test
-    fun `a strike on the second last roll`() {
-        val bowling = Bowling(listOf(10, 4))
+    fun `a strike on a frame which is not the last one`() {
+        val bowling = Bowling(listOf(10, 4, 5, 0, 0))
 
         val totalScore = bowling.totalScore()
 
-        assertThat(totalScore).isEqualTo(18)
+        assertThat(totalScore).isEqualTo(28)
     }
 
     @Test
-    fun `a strike on the third to last roll`() {
-        val bowling = Bowling(listOf(10, 4, 3))
-
-        val totalScore = bowling.totalScore()
-
-        assertThat(totalScore).isEqualTo(24)
-    }
-
-    @Test
-    fun `a spare on the last roll`() {
-        val bowling = Bowling(listOf(3, 7))
-
-        val totalScore = bowling.totalScore()
-
-        assertThat(totalScore).isEqualTo(10)
-    }
-
-    @Test
-    fun `a spare on the second last roll`() {
-        val bowling = Bowling(listOf(3, 7, 9))
+    fun `a spare on a frame which is not the last one`() {
+        val bowling = Bowling(listOf(3, 7, 9, 0))
 
         val totalScore = bowling.totalScore()
 
@@ -93,6 +75,42 @@ class MyClassTest {
         val totalScore = bowling.totalScore()
 
         assertThat(totalScore).isEqualTo(20)
+    }
+
+    @Test
+    fun `last frame - strike on the first roll`() {
+        val bowling = Bowling(listOf(10, 3, 4))
+
+        val totalScore = bowling.totalScore()
+
+        assertThat(totalScore).isEqualTo(17)
+    }
+
+    @Test
+    fun `last frame - strike on the first and the second roll`() {
+        val bowling = Bowling(listOf(10, 10, 4))
+
+        val totalScore = bowling.totalScore()
+
+        assertThat(totalScore).isEqualTo(24)
+    }
+
+    @Test
+    fun `last frame - strike on the first and the second roll - other values`() {
+        val bowling = Bowling(listOf(10, 0, 4))
+
+        val totalScore = bowling.totalScore()
+
+        assertThat(totalScore).isEqualTo(14)
+    }
+
+    @Test
+    fun `last frame - spare on the second roll`() {
+        val bowling = Bowling(listOf(4, 6, 3))
+
+        val totalScore = bowling.totalScore()
+
+        assertThat(totalScore).isEqualTo(13)
     }
 
     @Test
@@ -121,6 +139,8 @@ class MyClassTest {
 
         assertThat(totalScore).isEqualTo(150)
     }
+
+
 }
 
 class Bowling(private val rollScores: List<Int>) {
@@ -131,6 +151,8 @@ class Bowling(private val rollScores: List<Int>) {
         var totalScore = 0
         for (i in 0 until rollScores.size) {
             totalScore += currentFrameScore(i)
+            if (isStrike(rollScoreAt(i)) && isLastFrame(i)) break
+            if (isSpare(i,rollScoreAt(i)) && isLastFrame(i - 1)) break
         }
         return totalScore
     }
@@ -138,12 +160,12 @@ class Bowling(private val rollScores: List<Int>) {
     private fun currentFrameScore(rollPosition: Int): Int =
         when {
             isStrike(rollScoreAt(rollPosition)) -> {
-                isNewFrame = true
+                isNewFrame = !isLastFrame(rollPosition)
                 rollScoreAt(rollPosition) + rollScoreAt(rollPosition + 1) + rollScoreAt(rollPosition + 2)
             }
 
             isSpare(rollPosition, rollScoreAt(rollPosition)) -> {
-                isNewFrame = !isNewFrame
+                isNewFrame = if (isLastFrame(rollPosition)) false else !isNewFrame
                 rollScoreAt(rollPosition) + rollScoreAt(rollPosition + 1)
             }
 
@@ -152,6 +174,10 @@ class Bowling(private val rollScores: List<Int>) {
                 rollScoreAt(rollPosition)
             }
         }
+
+    private fun isLastFrame(rollPosition: Int): Boolean {
+        return rollPosition in (rollScores.size - 3) until rollScores.size
+    }
 
     private fun isSpare(i: Int, currentRollScore: Int): Boolean =
         !isNewFrame && rollScoreAt(i - 1) + currentRollScore == 10
