@@ -52,11 +52,50 @@ class MyClassTest {
 
         assertThat(totalScore).isEqualTo(18)
     }
+
+    @Test
+    fun `a spare on the last roll`() {
+        val bowling = Bowling(listOf(1, 2, 3, 7))
+
+        val totalScore = bowling.totalScore()
+
+        assertThat(totalScore).isEqualTo(13)
+    }
+
+    @Test
+    fun `a strike on the second-last roll`() {
+        val bowling = Bowling(listOf(10, 4))
+
+        val totalScore = bowling.totalScore()
+
+        assertThat(totalScore).isEqualTo(18)
+    }
+
+    @Test
+    fun `a strike on the third to last roll`() {
+        val bowling = Bowling(listOf(10, 4, 3))
+
+        val totalScore = bowling.totalScore()
+
+        assertThat(totalScore).isEqualTo(24)
+    }
 }
 
 class Bowling(private val rolls: List<Int>) {
     fun totalScore(): Int {
-        return rolls.sum()
+        var totalScore = 0
+        for (i in 0 until rolls.size) {
+            val roll = rolls[i]
+
+            if (roll == 10 && i + 1 < rolls.size && i + 2 < rolls.size) {
+                totalScore += roll + rolls[i + 1] + rolls[i + 2]
+            } else if (roll == 10 && i + 1 < rolls.size) {
+                totalScore += roll + rolls[i + 1]
+            } else {
+                totalScore += roll
+            }
+        }
+        return totalScore
     }
 }
 
