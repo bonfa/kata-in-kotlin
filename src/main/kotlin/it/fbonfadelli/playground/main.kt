@@ -9,4 +9,5 @@ fun main() {
     println("  - inventory")
     println("  - birthday greetings")
     println("  - bowling")
+    println("  - code cracker")
 }
