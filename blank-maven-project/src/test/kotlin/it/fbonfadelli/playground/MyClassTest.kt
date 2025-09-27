@@ -152,7 +152,7 @@ class Bowling(private val rollScores: List<Int>) {
         for (i in 0 until rollScores.size) {
             totalScore += currentFrameScore(i)
             if (isStrike(rollScoreAt(i)) && isLastFrame(i)) break
-            if (isSpare(i,rollScoreAt(i)) && isLastFrame(i - 1)) break
+            if (isSpare(i, rollScoreAt(i)) && isLastFrame(i - 1)) break
         }
         return totalScore
     }
