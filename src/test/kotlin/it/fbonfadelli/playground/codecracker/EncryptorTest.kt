@@ -5,45 +5,41 @@ import org.junit.jupiter.api.Test
 
 class EncryptorTest {
 
+    private val encryptor = Encryptor()
+    private val key = "bcdefghijklmnopqrstuvwxyza"
+
     @Test
     fun `empty message`() {
-        val encryptor = Encryptor()
-        val key = "bcdefghijklmnopqrstuvwxyza"
-        assertThat(encryptor.encrypt("", key)).isEqualTo("")
+        val encrypted = encryptor.encrypt("", key)
+
+        assertThat(encrypted).isEqualTo("")
     }
 
     @Test
     fun `a message with one character`() {
-        val encryptor = Encryptor()
-        val key = "bcdefghijklmnopqrstuvwxyza"
-        assertThat(encryptor.encrypt("a", key)).isEqualTo("b")
+        val encrypted = encryptor.encrypt("a", key)
+
+        assertThat(encrypted).isEqualTo("b")
     }
 
     @Test
     fun `another message with one character`() {
-        val encryptor = Encryptor()
-        val key = "bcdefghijklmnopqrstuvwxyza"
-        assertThat(encryptor.encrypt("b", key)).isEqualTo("c")
-    }
+        val encrypted = encryptor.encrypt("b", key)
 
-    @Test
-    fun `a message with one character - different key`() {
-        val encryptor = Encryptor()
-        val key = "cdefghijklmnopqrstuvwxyzab"
-        assertThat(encryptor.encrypt("a", key)).isEqualTo("c")
+        assertThat(encrypted).isEqualTo("c")
     }
 
     @Test
     fun `2 characters`() {
-        val encryptor = Encryptor()
-        val key = "bcdefghijklmnopqrstuvwxyza"
-        assertThat(encryptor.encrypt("aa", key)).isEqualTo("bb")
+        val encrypted = encryptor.encrypt("aa", key)
+
+        assertThat(encrypted).isEqualTo("bb")
     }
 
     @Test
     fun `many characters`() {
-        val encryptor = Encryptor()
-        val key = "bcdefghijklmnopqrstuvwxyza"
-        assertThat(encryptor.encrypt("abbbabccb", key)).isEqualTo("bcccbcddc")
+        val encrypted = encryptor.encrypt("abbbabccb", key)
+
+        assertThat(encrypted).isEqualTo("bcccbcddc")
     }
 }

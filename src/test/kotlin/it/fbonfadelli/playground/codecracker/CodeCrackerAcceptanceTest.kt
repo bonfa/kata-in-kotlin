@@ -8,10 +8,10 @@ class CodeCrackerAcceptanceTest {
     private val encryptor = Encryptor()
     private val decryptor = Decryptor()
 
+    private val key = "bcdefghijklmnopqrstuvwxyza"
 
     @Test
     fun `a message`() {
-        val key = "bcdefghijklmnopqrstuvwxyza"
         val message = "abbbabccb"
 
         val decrypted = decryptor.decrypt(encryptor.encrypt(message, key), key)
@@ -21,7 +21,6 @@ class CodeCrackerAcceptanceTest {
 
     @Test
     fun `all the alphabet`() {
-        val key = "bcdefghijklmnopqrstuvwxyza"
         val message = "abcdefghijklmnopqrstuvwxyz"
 
         val decrypted = decryptor.decrypt(encryptor.encrypt(message, key), key)
