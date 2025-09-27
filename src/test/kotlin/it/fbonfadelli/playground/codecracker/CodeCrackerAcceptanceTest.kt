@@ -8,7 +8,7 @@ class CodeCrackerAcceptanceTest {
     private val encryptor = Encryptor()
     private val decryptor = Decryptor()
 
-    private val key = "bcdefghijklmnopqrstuvwxyza"
+    private val key = "!)\"(£*%&><@abcdefghijklmno"
 
     @Test
     fun `a message`() {
