@@ -94,6 +94,33 @@ class MyClassTest {
 
         assertThat(totalScore).isEqualTo(20)
     }
+
+    @Test
+    fun `acceptance 1 - all strikes`() {
+        val bowling = Bowling(listOf(10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10))
+
+        val totalScore = bowling.totalScore()
+
+        assertThat(totalScore).isEqualTo(300)
+    }
+
+    @Test
+    fun `acceptance 2 - no spares nor strikes`() {
+        val bowling = Bowling(listOf(9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0))
+
+        val totalScore = bowling.totalScore()
+
+        assertThat(totalScore).isEqualTo(90)
+    }
+
+    @Test
+    fun `acceptance 3 - all spares and five as last roll`() {
+        val bowling = Bowling(listOf(5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5))
+
+        val totalScore = bowling.totalScore()
+
+        assertThat(totalScore).isEqualTo(150)
+    }
 }
 
 class Bowling(private val rollScores: List<Int>) {
