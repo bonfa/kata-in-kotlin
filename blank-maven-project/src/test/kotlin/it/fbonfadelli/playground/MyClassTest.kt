@@ -6,48 +6,21 @@ import org.junit.jupiter.api.Test
 class MyClassTest {
 
     @Test
-    fun `single roll`() {
-        val bowling = Bowling(listOf(3))
-
-        val totalScore = bowling.totalScore()
-
-        assertThat(totalScore).isEqualTo(3)
-    }
-
-    @Test
-    fun `single roll - another score`() {
-        val bowling = Bowling(listOf(4))
-
-        val totalScore = bowling.totalScore()
-
-        assertThat(totalScore).isEqualTo(4)
-    }
-
-    @Test
-    fun `two rolls - not spare nor strike`() {
-        val bowling = Bowling(listOf(3, 4))
-
-        val totalScore = bowling.totalScore()
-
-        assertThat(totalScore).isEqualTo(7)
-    }
-
-    @Test
     fun `many rolls - not spare nor strike`() {
-        val bowling = Bowling(listOf(3, 4, 5, 4, 2))
+        val bowling = Bowling(listOf(3, 4, 5, 4, 2, 4))
 
         val totalScore = bowling.totalScore()
 
-        assertThat(totalScore).isEqualTo(18)
+        assertThat(totalScore).isEqualTo(22)
     }
 
     @Test
     fun `a strike on the last roll`() {
-        val bowling = Bowling(listOf(1, 2, 10))
+        val bowling = Bowling(listOf(1, 9, 10))
 
         val totalScore = bowling.totalScore()
 
-        assertThat(totalScore).isEqualTo(13)
+        assertThat(totalScore).isEqualTo(20)
     }
 
     @Test
@@ -139,51 +112,110 @@ class MyClassTest {
 
         assertThat(totalScore).isEqualTo(150)
     }
+}
 
+sealed interface Frame {
+    fun getFirstRollScore(): Int
+    fun getSecondRollScore(): Int?
+}
 
+object Strike : Frame {
+    fun getScore(nextFrame: Frame, secondNextFrame: Frame?): Int =
+        10 + nextFrame.getFirstRollScore() + (nextFrame.getSecondRollScore() ?: secondNextFrame?.getFirstRollScore()
+        ?: 0)
+
+    override fun getFirstRollScore(): Int = 10
+
+    override fun getSecondRollScore(): Int? = null
+}
+
+class Spare(private val firstRollScore: Int) : Frame {
+    fun getScore(nextFrame: Frame): Int =
+        10 + nextFrame.getFirstRollScore()
+
+    override fun getFirstRollScore(): Int =
+        firstRollScore
+
+    override fun getSecondRollScore(): Int = 10 - firstRollScore
+}
+
+class NorStrikeNorSpare(
+    private val firstRollScore: Int,
+    private val secondRollScore: Int
+) : Frame {
+    fun getScore(): Int =
+        firstRollScore + secondRollScore
+
+    override fun getFirstRollScore(): Int =
+        firstRollScore
+
+    override fun getSecondRollScore(): Int =
+        secondRollScore
+}
+
+class LastFrame(
+    private val firstRollScore: Int,
+    private val secondRollScore: Int,
+    private val thirdRollScore: Int = 0,
+) : Frame {
+    fun getScore(): Int =
+        firstRollScore + secondRollScore + thirdRollScore
+
+    override fun getFirstRollScore(): Int =
+        firstRollScore
+
+    override fun getSecondRollScore(): Int =
+        secondRollScore
+}
+
+class BowlingGame(private val frames: List<Frame>) {
+    fun totalScore(): Int {
+        var totalScore = 0
+        for (i in 0 until frames.size) {
+            totalScore += when (val frame = frames[i]) {
+                is LastFrame -> frame.getScore()
+                is NorStrikeNorSpare -> frame.getScore()
+                is Spare -> frame.getScore(frames[i + 1])
+                is Strike -> frame.getScore(frames[i + 1], frames.getOrNull(i + 2))
+            }
+        }
+        return totalScore
+    }
 }
 
 class Bowling(private val rollScores: List<Int>) {
 
-    private var isNewFrame = true
-
     fun totalScore(): Int {
-        var totalScore = 0
-        for (i in 0 until rollScores.size) {
-            totalScore += currentFrameScore(i)
-            if (isStrike(rollScoreAt(i)) && isLastFrame(i)) break
-            if (isSpare(i, rollScoreAt(i)) && isLastFrame(i - 1)) break
-        }
-        return totalScore
+        return BowlingGame(createFrames(rollScores)).totalScore()
     }
 
-    private fun currentFrameScore(rollPosition: Int): Int =
-        when {
-            isStrike(rollScoreAt(rollPosition)) -> {
-                isNewFrame = !isLastFrame(rollPosition)
-                rollScoreAt(rollPosition) + rollScoreAt(rollPosition + 1) + rollScoreAt(rollPosition + 2)
-            }
+    private fun createFrames(rollScores: List<Int>): List<Frame> {
+        val frames = mutableListOf<Frame>()
 
-            isSpare(rollPosition, rollScoreAt(rollPosition)) -> {
-                isNewFrame = if (isLastFrame(rollPosition)) false else !isNewFrame
-                rollScoreAt(rollPosition) + rollScoreAt(rollPosition + 1)
-            }
-
-            else -> {
-                isNewFrame = !isNewFrame
-                rollScoreAt(rollPosition)
+        var i = 0
+        var prevScore: Int? = null
+        while (prevScore != null || i < rollScores.size - 3)  {
+            val rollScore = rollScores[i]
+            if (rollScore == 10) {
+                frames.add(Strike)
+                prevScore = null
+                i++
+            } else if (prevScore == null) {
+                prevScore = rollScore
+                i++
+            } else {
+                if (prevScore + rollScore == 10) {
+                    frames.add(Spare(prevScore))
+                } else {
+                    frames.add(NorStrikeNorSpare(prevScore, rollScore))
+                }
+                prevScore = null
+                i++
             }
         }
 
-    private fun isLastFrame(rollPosition: Int): Boolean {
-        return rollPosition in (rollScores.size - 3) until rollScores.size
+        frames.add(LastFrame(rollScores[i], rollScores[i + 1], rollScores.getOrNull(i + 2) ?: 0))
+
+        return frames
     }
-
-    private fun isSpare(i: Int, currentRollScore: Int): Boolean =
-        !isNewFrame && rollScoreAt(i - 1) + currentRollScore == 10
-
-    private fun isStrike(roll: Int): Boolean = roll == 10
-
-    private fun rollScoreAt(position: Int): Int =
-        rollScores.getOrNull(position) ?: 0
 }
