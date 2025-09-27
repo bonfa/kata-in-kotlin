@@ -9,7 +9,6 @@ class CodeCrackerAcceptanceTest {
     private val encryptor = Encryptor(key)
     private val decryptor = Decryptor(key)
 
-
     @Test
     fun `a message`() {
         val message = "abbbabccb"
