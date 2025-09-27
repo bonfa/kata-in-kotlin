@@ -7,4 +7,5 @@ fun main() {
     println()
     println("The main will just print the list of exercises")
     println("  - inventory")
+    println("  - birthday greetings")
 }
