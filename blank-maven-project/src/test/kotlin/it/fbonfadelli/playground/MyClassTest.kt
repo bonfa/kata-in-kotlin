@@ -35,19 +35,28 @@ class MyClassTest {
         assertThat(totalScore).isEqualTo(4)
     }
 
-//    @Test
-//    fun `two rolls - not spare nor strike`() {
-//        val bowling = Bowling(listOf(3))
-//
-//        val totalScore = bowling.totalScore()
-//
-//        assertThat(totalScore).isEqualTo(3)
-//    }
+    @Test
+    fun `two rolls - not spare nor strike`() {
+        val bowling = Bowling(listOf(3, 4))
+
+        val totalScore = bowling.totalScore()
+
+        assertThat(totalScore).isEqualTo(7)
+    }
+
+    @Test
+    fun `many rolls - not spare nor strike`() {
+        val bowling = Bowling(listOf(3, 4, 5, 4, 2))
+
+        val totalScore = bowling.totalScore()
+
+        assertThat(totalScore).isEqualTo(18)
+    }
 }
 
 class Bowling(private val rolls: List<Int>) {
     fun totalScore(): Int {
-        return rolls.first()
+        return rolls.sum()
     }
 }
 
