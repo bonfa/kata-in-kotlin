@@ -87,9 +87,9 @@ class Bowling(private val rolls: List<Int>) {
         for (i in 0 until rolls.size) {
             val roll = rolls[i]
 
-            if (roll == 10 && i + 1 < rolls.size && i + 2 < rolls.size) {
+            if (isStrike(roll) && hasNextRoll(i) && i + 2 < rolls.size) {
                 totalScore += roll + rolls[i + 1] + rolls[i + 2]
-            } else if (roll == 10 && i + 1 < rolls.size) {
+            } else if (isStrike(roll) && hasNextRoll(i)) {
                 totalScore += roll + rolls[i + 1]
             } else {
                 totalScore += roll
@@ -97,8 +97,8 @@ class Bowling(private val rolls: List<Int>) {
         }
         return totalScore
     }
-}
 
-class Roll(private val score: Int) {
-    fun getScore(): Int = score
+    private fun hasNextRoll(i: Int): Boolean = i + 1 < rolls.size
+
+    private fun isStrike(roll: Int): Boolean = roll == 10
 }
