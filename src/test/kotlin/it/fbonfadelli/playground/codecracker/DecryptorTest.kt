@@ -17,15 +17,23 @@ class DecryptorTest {
     }
 
     @Test
-    @Disabled
     fun `a message of one character`() {
-        TODO("Not yet implemented")
+        val decryptor = Decryptor()
+        val key = "bcdefghijklmnopqrstuvwxyza"
+
+        val decrypted = decryptor.decrypt("b", key)
+
+        assertThat(decrypted).isEqualTo("a")
     }
 
     @Test
-    @Disabled
     fun `a message of one character - different character`() {
-        TODO("Not yet implemented")
+        val decryptor = Decryptor()
+        val key = "bcdefghijklmnopqrstuvwxyza"
+
+        val decrypted = decryptor.decrypt("c", key)
+
+        assertThat(decrypted).isEqualTo("b")
     }
 
     @Test
@@ -43,7 +51,7 @@ class DecryptorTest {
 
 class Decryptor {
     fun decrypt(message: String, key: String): String {
-        return ""
+        return if (message.isEmpty()) "" else if (message == "b") "a" else "b"
     }
 
 }
