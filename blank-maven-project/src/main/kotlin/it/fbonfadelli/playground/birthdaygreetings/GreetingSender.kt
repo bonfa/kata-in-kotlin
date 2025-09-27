@@ -1,4 +1,4 @@
-package it.fbonfadelli.playground
+package it.fbonfadelli.playground.birthdaygreetings
 
 interface GreetingSender {
     fun sendGreetingsTo(friend: Friend)

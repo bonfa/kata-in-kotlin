@@ -1,4 +1,4 @@
-package it.fbonfadelli.playground
+package it.fbonfadelli.playground.birthdaygreetings
 
 import io.mockk.*
 import org.junit.jupiter.api.Test
@@ -142,4 +142,3 @@ class BirthdayGreetingsTest {
             email = "::an_email::"
         )
 }
-

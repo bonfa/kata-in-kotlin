@@ -1,4 +1,4 @@
-package it.fbonfadelli.playground
+package it.fbonfadelli.playground.birthdaygreetings
 
 import java.time.LocalDate
 
