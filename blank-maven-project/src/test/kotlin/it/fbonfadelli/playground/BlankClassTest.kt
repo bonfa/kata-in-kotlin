@@ -3,7 +3,7 @@ package it.fbonfadelli.playground
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class MyClassTest {
+class BlankClassTest {
 
     @Test
     fun `my first test`() {
