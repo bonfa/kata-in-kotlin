@@ -60,10 +60,11 @@ class CodeCrackerTest {
 
 class Encryptor {
     fun encrypt(message: String, key: String): String {
+        key.toCharArray()
+
         return when {
             message.isEmpty() -> ""
-            message == "a" && key == "bcdefghijklmnopqrstuvwxyza" -> "b"
-            else -> "c"
+            else -> key[message.first() - 'a'].toString()
         }
     }
 
