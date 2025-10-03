@@ -1,7 +1,6 @@
 package it.fbonfadelli.playground.manhattandistance
 
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import kotlin.math.abs
 
@@ -69,8 +68,7 @@ class ManhattanDistanceTest {
     }
 
     data class Point(private val x: Int, private val y: Int) {
-        fun manhattanDistanceFrom(point2: Point): Int {
-            return abs(point2.y - this.y) + abs(point2.x - this.x)
-        }
+        fun manhattanDistanceFrom(another: Point): Int =
+            abs(another.y - this.y) + abs(another.x - this.x)
     }
 }
