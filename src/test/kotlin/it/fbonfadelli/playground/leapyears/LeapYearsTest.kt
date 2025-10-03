@@ -23,17 +23,17 @@ class LeapYearsTest {
     }
 
     @Test
-    fun `year which is divisible by 4`() {
+    fun `year divisible by 4`() {
         assertThat(isLeapYear(2016)).isTrue
     }
 
     @Test
-    fun `even year - not divisible by four`() {
+    fun `even year not divisible by four`() {
         assertThat(isLeapYear(2018)).isFalse
     }
 
     @Test
-    fun `by 100 but not by 400`() {
+    fun `year divisible by 100 but not by 400`() {
         assertThat(isLeapYear(1900)).isFalse
     }
 
