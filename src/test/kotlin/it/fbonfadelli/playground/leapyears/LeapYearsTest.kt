@@ -1,9 +1,7 @@
 package it.fbonfadelli.playground.leapyears
 
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
-import java.time.Year
 
 class LeapYearsTest {
 
@@ -30,12 +28,5 @@ class LeapYearsTest {
     @Test
     fun `year divisible by 400`() {
         assertThat(isLeapYear(2000)).isTrue
-    }
-
-    private fun isLeapYear(year: Int): Boolean = when {
-        year % 400 == 0 -> true
-        year % 100 == 0 -> false
-        year % 4 == 0 -> true
-        else -> false
     }
 }
