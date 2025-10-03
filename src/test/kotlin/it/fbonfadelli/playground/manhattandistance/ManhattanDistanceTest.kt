@@ -13,10 +13,16 @@ class ManhattanDistanceTest {
     The class Point has no Getters, no Setters
     The class Point has no public properties (i.e. the internal state cannot be read from outside the class).
 
-    TESTS
+    SUGGESTED TESTS
     manhattanDistance( Point(1, 1), Point(1, 1) ) should returns 0
     manhattanDistance( Point(5, 4), Point(3, 2) ) should returns 4
     manhattanDistance( Point(1, 1), Point(0, 3) ) should returns 3
+
+    TEST LIST
+    - same point
+    - changing only one coordinate (y)
+    - changing only other coordinate (x)
+    - changing both coordinates (x, y)
      */
 
     @Test
