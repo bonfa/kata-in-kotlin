@@ -16,3 +16,4 @@ The class Point has no public properties (i.e. the internal state cannot be read
 - manhattanDistance( Point(1, 1), Point(1, 1) ) should return 0
 - manhattanDistance( Point(5, 4), Point(3, 2) ) should return 4
 - manhattanDistance( Point(1, 1), Point(0, 3) ) should return 3
+- 
