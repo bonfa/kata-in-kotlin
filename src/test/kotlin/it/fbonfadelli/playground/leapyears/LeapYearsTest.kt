@@ -32,7 +32,10 @@ class LeapYearsTest {
         assertThat(isLeapYear(2000)).isTrue
     }
 
-    private fun isLeapYear(year: Int): Boolean {
-        return if (year % 400 == 0) true else if (year % 100 == 0) false else year % 4 == 0
+    private fun isLeapYear(year: Int): Boolean = when {
+        year % 400 == 0 -> true
+        year % 100 == 0 -> false
+        year % 4 == 0 -> true
+        else -> false
     }
 }
