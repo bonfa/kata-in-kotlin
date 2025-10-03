@@ -13,7 +13,6 @@ class LeapYearsTest {
     All years divisible by 4 but not by 100 ARE leap years (e.g., 2008, 2012, 2016),
     All years not divisible by 4 are NOT leap years (e.g. 2017, 2018, 2019).
 
-    - 1700 --> not leap year
     - 2000 --> leap year
 
      */
@@ -34,11 +33,16 @@ class LeapYearsTest {
     }
 
     @Test
-    fun `year divisible by four and by 100 but not by 400`() {
+    fun `by 100 but not by 400`() {
         assertThat(isLeapYear(1900)).isFalse
     }
 
+    @Test
+    fun `year divisible by 400`() {
+        assertThat(isLeapYear(2000)).isTrue
+    }
+
     private fun isLeapYear(year: Int): Boolean {
-        return if (year % 100 == 0) false else year % 4 == 0
+        return if (year % 400 == 0) true else if (year % 100 == 0) false else year % 4 == 0
     }
 }
