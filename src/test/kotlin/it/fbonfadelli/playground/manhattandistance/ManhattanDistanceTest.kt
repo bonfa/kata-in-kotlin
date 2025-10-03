@@ -46,6 +46,21 @@ class ManhattanDistanceTest {
         assertThat(manhattanDistance(Point(1, 4), Point(9, 4))).isEqualTo(8)
     }
 
+    @Test
+    fun `points with same y - x of first point is greater than the y of second point`() {
+        assertThat(manhattanDistance(Point(10, 4), Point(0, 4))).isEqualTo(10)
+    }
+
+    @Test
+    fun `different x and y`() {
+        assertThat(manhattanDistance(Point(5, 4), Point(3, 2))).isEqualTo(4)
+    }
+
+    @Test
+    fun `different x and y - another case`() {
+        assertThat(manhattanDistance(Point(1, 1), Point(0, 3))).isEqualTo(3)
+    }
+
     private fun manhattanDistance(
         point: Point,
         point2: Point
@@ -55,7 +70,7 @@ class ManhattanDistanceTest {
 
     data class Point(private val x: Int, private val y: Int) {
         fun manhattanDistanceFrom(point2: Point): Int {
-            return abs(point2.y - this.y) + point2.x - this.x
+            return abs(point2.y - this.y) + abs(point2.x - this.x)
         }
     }
 }
