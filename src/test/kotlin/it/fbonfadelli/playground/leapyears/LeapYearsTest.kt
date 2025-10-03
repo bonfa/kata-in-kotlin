@@ -22,10 +22,20 @@ class LeapYearsTest {
 
     @Test
     fun `odd year`() {
-        assertThat(isLeapYear(2017)).isFalse()
+        assertThat(isLeapYear(2017)).isFalse
+    }
+
+    @Test
+    fun `year which is divisible by 4`() {
+        assertThat(isLeapYear(2016)).isTrue
+    }
+
+    @Test
+    fun `even year - not divisible by four`() {
+        assertThat(isLeapYear(2018)).isFalse
     }
 
     private fun isLeapYear(year: Int): Boolean {
-        return false
+        return year % 4 == 0
     }
 }
