@@ -28,7 +28,7 @@ class MarsRoverTest {
      */
 
     @Test
-    fun `1d space, move forward`() {
+    fun `1d space, default starting position, standard direction, move forward`() {
         val rover = Rover(0, Direction.NORTH, listOf(MOVE_FORWARD))
 
         val finalPosition = rover.finalPosition()
@@ -37,7 +37,7 @@ class MarsRoverTest {
     }
 
     @Test
-    fun `1d space, move forward twice`() {
+    fun `1d space, default starting position, standard direction, move forward twice`() {
         val rover = Rover(0, Direction.NORTH, listOf(MOVE_FORWARD, MOVE_FORWARD))
 
         val finalPosition = rover.finalPosition()
@@ -46,7 +46,7 @@ class MarsRoverTest {
     }
 
     @Test
-    fun `1d space, different initial position, move forward twice`() {
+    fun `1d space, different initial position, standard direction, move forward twice`() {
         val rover = Rover(2, Direction.NORTH, listOf(MOVE_FORWARD, MOVE_FORWARD))
 
         val finalPosition = rover.finalPosition()
@@ -55,7 +55,7 @@ class MarsRoverTest {
     }
 
     @Test
-    fun `1d space, different initial position, rotate left`() {
+    fun `1d space, different initial position, standard direction, rotate left`() {
         val rover = Rover(2, Direction.NORTH, listOf(ROTATE_LEFT))
 
         val finalPosition = rover.finalPosition()
@@ -64,7 +64,7 @@ class MarsRoverTest {
     }
 
     @Test
-    fun `1d space, different initial position, rotate right`() {
+    fun `1d space, different initial position, standard direction, rotate right`() {
         val rover = Rover(2, Direction.NORTH, listOf(ROTATE_RIGHT))
 
         val finalPosition = rover.finalPosition()
@@ -73,7 +73,7 @@ class MarsRoverTest {
     }
 
     @Test
-    fun `1d space, move forward, final facing`() {
+    fun `1d space, different initial position, standard direction, move forward`() {
         val rover = Rover(2, Direction.NORTH, listOf(MOVE_FORWARD))
 
         val finalPosition = rover.finalFacing()
@@ -82,12 +82,48 @@ class MarsRoverTest {
     }
 
     @Test
-    fun `1d space, move forward, different initial facing, final facing`() {
+    fun `1d space, different initial position, different initial direction, move forward`() {
         val rover = Rover(2, Direction.SOUTH, listOf(MOVE_FORWARD))
 
         val finalPosition = rover.finalFacing()
 
         assertThat(finalPosition).isEqualTo(Direction.SOUTH)
+    }
+
+    @Test
+    fun `1d space, different initial position, standard initial direction, rotate left`() {
+        val rover = Rover(2, Direction.NORTH, listOf(ROTATE_LEFT))
+
+        val finalPosition = rover.finalFacing()
+
+        assertThat(finalPosition).isEqualTo(Direction.WEST)
+    }
+
+    @Test
+    fun `1d space, different initial position, initial direction is WEST, rotate left`() {
+        val rover = Rover(2, Direction.WEST, listOf(ROTATE_LEFT))
+
+        val finalPosition = rover.finalFacing()
+
+        assertThat(finalPosition).isEqualTo(Direction.SOUTH)
+    }
+
+    @Test
+    fun `1d space, different initial position, initial direction is SOUTH, rotate left`() {
+        val rover = Rover(2, Direction.SOUTH, listOf(ROTATE_LEFT))
+
+        val finalPosition = rover.finalFacing()
+
+        assertThat(finalPosition).isEqualTo(Direction.EAST)
+    }
+
+    @Test
+    fun `1d space, different initial position, initial direction is EAST, rotate left`() {
+        val rover = Rover(2, Direction.EAST, listOf(ROTATE_LEFT))
+
+        val finalPosition = rover.finalFacing()
+
+        assertThat(finalPosition).isEqualTo(Direction.NORTH)
     }
 }
 
@@ -100,8 +136,20 @@ class Rover(
         return initialPosition + positionIncrement()
     }
 
-    fun finalFacing(): Direction =
-        initialDirection
+    fun finalFacing(): Direction {
+        val command = newCommands.first()
+        if (command == ROTATE_LEFT) {
+            if (initialDirection == Direction.WEST)
+                return Direction.SOUTH
+            if (initialDirection == Direction.SOUTH)
+                return Direction.EAST
+            if (initialDirection == Direction.EAST)
+                return Direction.NORTH
+            return Direction.WEST
+
+        }
+        return initialDirection
+    }
 
     private fun positionIncrement(): Int =
         newCommands.map { if (it == MOVE_FORWARD) 1 else 0 }.sum()
