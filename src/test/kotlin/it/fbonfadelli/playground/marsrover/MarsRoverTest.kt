@@ -26,7 +26,7 @@ class MarsRoverTest {
 
     @Test
     fun `1d space, move forward`() {
-        val rover = Rover(0, 0, 10, listOf(0))
+        val rover = Rover(listOf(0))
 
         val finalPosition = rover.finalPosition()
 
@@ -35,7 +35,7 @@ class MarsRoverTest {
 
     @Test
     fun `1d space, move forward twice`() {
-        val rover = Rover(0, 0,10, listOf(0,0))
+        val rover = Rover(listOf(0,0))
 
         val finalPosition = rover.finalPosition()
 
@@ -44,9 +44,6 @@ class MarsRoverTest {
 }
 
 class Rover(
-    initialPosition: Int,
-    initialDirection: Int,
-    spaceLength: Int,
     val commands: List<Int>
 ) {
     fun finalPosition(): Int {
