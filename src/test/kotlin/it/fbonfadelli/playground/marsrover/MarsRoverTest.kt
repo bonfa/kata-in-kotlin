@@ -71,6 +71,15 @@ class MarsRoverTest {
 
         assertThat(finalPosition).isEqualTo(2)
     }
+
+    @Test
+    fun `1d space, move forward, final facing`() {
+        val rover = Rover(2, listOf(MOVE_FORWARD))
+
+        val finalPosition = rover.finalFacing()
+
+        assertThat(finalPosition).isEqualTo(Direction.NORTH)
+    }
 }
 
 class Rover(
@@ -84,10 +93,20 @@ class Rover(
     private fun positionIncrement(): Int =
         newCommands.map { if (it == MOVE_FORWARD) 1 else 0 }.sum()
 
+    fun finalFacing(): Direction =
+        Direction.NORTH
+
 }
 
 enum class Command {
     MOVE_FORWARD,
     ROTATE_LEFT,
     ROTATE_RIGHT,
+}
+
+enum class Direction {
+    NORTH,
+    SOUTH,
+    EAST,
+    WEST,
 }
