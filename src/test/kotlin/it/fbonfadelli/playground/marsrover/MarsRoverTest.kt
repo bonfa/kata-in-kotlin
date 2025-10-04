@@ -126,6 +126,42 @@ class MarsRoverTest {
 
         assertThat(finalPosition).isEqualTo(NORTH)
     }
+
+    @Test
+    fun `1d space, different initial position, standard initial direction, rotate right`() {
+        val rover = Rover(2, NORTH, listOf(ROTATE_RIGHT))
+
+        val finalPosition = rover.finalFacing()
+
+        assertThat(finalPosition).isEqualTo(EAST)
+    }
+
+    @Test
+    fun `1d space, different initial position, initial direction is WEST, rotate right`() {
+        val rover = Rover(2, EAST, listOf(ROTATE_RIGHT))
+
+        val finalPosition = rover.finalFacing()
+
+        assertThat(finalPosition).isEqualTo(SOUTH)
+    }
+
+    @Test
+    fun `1d space, different initial position, initial direction is SOUTH, rotate right`() {
+        val rover = Rover(2, SOUTH, listOf(ROTATE_RIGHT))
+
+        val finalPosition = rover.finalFacing()
+
+        assertThat(finalPosition).isEqualTo(WEST)
+    }
+
+    @Test
+    fun `1d space, different initial position, initial direction is EAST, rotate right`() {
+        val rover = Rover(2, Direction.WEST, listOf(ROTATE_RIGHT))
+
+        val finalPosition = rover.finalFacing()
+
+        assertThat(finalPosition).isEqualTo(NORTH)
+    }
 }
 
 class Rover(
@@ -139,13 +175,21 @@ class Rover(
 
     fun finalFacing(): Direction {
         val command = newCommands.first()
-        return if (command == ROTATE_LEFT) when (initialDirection) {
-            WEST -> SOUTH
-            SOUTH -> EAST
-            EAST -> NORTH
-            NORTH -> WEST
-        } else
-            initialDirection
+        return when (command) {
+            ROTATE_LEFT -> when (initialDirection) {
+                WEST -> SOUTH
+                SOUTH -> EAST
+                EAST -> NORTH
+                NORTH -> WEST
+            }
+            ROTATE_RIGHT -> when (initialDirection) {
+                NORTH -> EAST
+                EAST -> SOUTH
+                SOUTH -> WEST
+                WEST -> NORTH
+            }
+            MOVE_FORWARD -> initialDirection
+        }
     }
 
     private fun positionIncrement(): Int =
