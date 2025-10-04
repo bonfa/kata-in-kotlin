@@ -29,7 +29,7 @@ class MarsRoverTest {
 
     @Test
     fun `1d space, move forward`() {
-        val rover = Rover(0, listOf(MOVE_FORWARD), Direction.NORTH)
+        val rover = Rover(0, Direction.NORTH, listOf(MOVE_FORWARD))
 
         val finalPosition = rover.finalPosition()
 
@@ -38,7 +38,7 @@ class MarsRoverTest {
 
     @Test
     fun `1d space, move forward twice`() {
-        val rover = Rover(0, listOf(MOVE_FORWARD, MOVE_FORWARD), Direction.NORTH)
+        val rover = Rover(0, Direction.NORTH, listOf(MOVE_FORWARD, MOVE_FORWARD))
 
         val finalPosition = rover.finalPosition()
 
@@ -47,7 +47,7 @@ class MarsRoverTest {
 
     @Test
     fun `1d space, different initial position, move forward twice`() {
-        val rover = Rover(2, listOf(MOVE_FORWARD, MOVE_FORWARD), Direction.NORTH)
+        val rover = Rover(2, Direction.NORTH, listOf(MOVE_FORWARD, MOVE_FORWARD))
 
         val finalPosition = rover.finalPosition()
 
@@ -56,7 +56,7 @@ class MarsRoverTest {
 
     @Test
     fun `1d space, different initial position, rotate left`() {
-        val rover = Rover(2, listOf(ROTATE_LEFT), Direction.NORTH)
+        val rover = Rover(2, Direction.NORTH, listOf(ROTATE_LEFT))
 
         val finalPosition = rover.finalPosition()
 
@@ -65,7 +65,7 @@ class MarsRoverTest {
 
     @Test
     fun `1d space, different initial position, rotate right`() {
-        val rover = Rover(2, listOf(ROTATE_RIGHT), Direction.NORTH)
+        val rover = Rover(2, Direction.NORTH, listOf(ROTATE_RIGHT))
 
         val finalPosition = rover.finalPosition()
 
@@ -74,7 +74,7 @@ class MarsRoverTest {
 
     @Test
     fun `1d space, move forward, final facing`() {
-        val rover = Rover(2, listOf(MOVE_FORWARD), Direction.NORTH)
+        val rover = Rover(2, Direction.NORTH, listOf(MOVE_FORWARD))
 
         val finalPosition = rover.finalFacing()
 
@@ -83,7 +83,7 @@ class MarsRoverTest {
 
     @Test
     fun `1d space, move forward, different initial facing, final facing`() {
-        val rover = Rover(2, listOf(MOVE_FORWARD), Direction.SOUTH)
+        val rover = Rover(2, Direction.SOUTH, listOf(MOVE_FORWARD))
 
         val finalPosition = rover.finalFacing()
 
@@ -93,18 +93,18 @@ class MarsRoverTest {
 
 class Rover(
     private val initialPosition: Int,
-    private val newCommands: List<Command>,
     private val initialDirection: Direction,
+    private val newCommands: List<Command>,
 ) {
     fun finalPosition(): Int {
         return initialPosition + positionIncrement()
     }
 
-    private fun positionIncrement(): Int =
-        newCommands.map { if (it == MOVE_FORWARD) 1 else 0 }.sum()
-
     fun finalFacing(): Direction =
         initialDirection
+
+    private fun positionIncrement(): Int =
+        newCommands.map { if (it == MOVE_FORWARD) 1 else 0 }.sum()
 
 }
 
