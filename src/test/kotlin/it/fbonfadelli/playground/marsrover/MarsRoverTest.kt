@@ -1,10 +1,7 @@
 package it.fbonfadelli.playground.marsrover
 
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
-import sun.security.util.Length
-import javax.swing.text.Position
 
 class MarsRoverTest {
 
@@ -19,9 +16,9 @@ class MarsRoverTest {
 
      TESTS
      - map: 1D, 1 command (forward)
+     - map: 1D, 2 commands (forward, forward)
      - map: 1D, 1 command (turn right)
      - map: 1D, 1 command (turn left)
-     - map: 1D, 2 commands (forward, forward)
      - map: 1D, 2 commands (forward, turn right)
      - map: 1D, 2 commands (forward, turn left)
      - map: 2D, 1 command (turn right)
@@ -29,16 +26,25 @@ class MarsRoverTest {
 
     @Test
     fun `1d space, move forward`() {
-        val rover = Rover(0, 0,10, 0)
+        val rover = Rover(0, 0, 10, 0, null)
 
         val finalPosition = rover.finalPosition()
 
         assertThat(finalPosition).isEqualTo(1)
     }
+
+    @Test
+    fun `1d space, move forward twice`() {
+        val rover = Rover(0, 0,10, 0, 0)
+
+        val finalPosition = rover.finalPosition()
+
+        assertThat(finalPosition).isEqualTo(2)
+    }
 }
 
-class Rover(initialPosition: Int, initialDirection:Int, spaceLength: Int, command: Int) {
+class Rover(initialPosition: Int, initialDirection: Int, spaceLength: Int, command: Int, val command2: Int?) {
     fun finalPosition(): Int {
-        return 1
+        return if (command2 == null) 1 else 2
     }
 }
