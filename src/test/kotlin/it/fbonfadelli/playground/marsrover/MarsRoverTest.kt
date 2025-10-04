@@ -2,6 +2,7 @@ package it.fbonfadelli.playground.marsrover
 
 import it.fbonfadelli.playground.marsrover.Command.MOVE_FORWARD
 import it.fbonfadelli.playground.marsrover.Command.ROTATE_LEFT
+import it.fbonfadelli.playground.marsrover.Command.ROTATE_RIGHT
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -61,6 +62,15 @@ class MarsRoverTest {
 
         assertThat(finalPosition).isEqualTo(2)
     }
+
+    @Test
+    fun `1d space, different initial position, rotate right`() {
+        val rover = Rover(2, listOf(ROTATE_RIGHT))
+
+        val finalPosition = rover.finalPosition()
+
+        assertThat(finalPosition).isEqualTo(2)
+    }
 }
 
 class Rover(
@@ -79,4 +89,5 @@ class Rover(
 enum class Command {
     MOVE_FORWARD,
     ROTATE_LEFT,
+    ROTATE_RIGHT,
 }
