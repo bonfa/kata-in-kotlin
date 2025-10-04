@@ -29,7 +29,7 @@ class MarsRoverTest {
 
     @Test
     fun `1d space, move forward`() {
-        val rover = Rover(0, listOf(MOVE_FORWARD))
+        val rover = Rover(0, listOf(MOVE_FORWARD), Direction.NORTH)
 
         val finalPosition = rover.finalPosition()
 
@@ -38,7 +38,7 @@ class MarsRoverTest {
 
     @Test
     fun `1d space, move forward twice`() {
-        val rover = Rover(0, listOf(MOVE_FORWARD, MOVE_FORWARD))
+        val rover = Rover(0, listOf(MOVE_FORWARD, MOVE_FORWARD), Direction.NORTH)
 
         val finalPosition = rover.finalPosition()
 
@@ -47,7 +47,7 @@ class MarsRoverTest {
 
     @Test
     fun `1d space, different initial position, move forward twice`() {
-        val rover = Rover(2, listOf(MOVE_FORWARD, MOVE_FORWARD))
+        val rover = Rover(2, listOf(MOVE_FORWARD, MOVE_FORWARD), Direction.NORTH)
 
         val finalPosition = rover.finalPosition()
 
@@ -56,7 +56,7 @@ class MarsRoverTest {
 
     @Test
     fun `1d space, different initial position, rotate left`() {
-        val rover = Rover(2, listOf(ROTATE_LEFT))
+        val rover = Rover(2, listOf(ROTATE_LEFT), Direction.NORTH)
 
         val finalPosition = rover.finalPosition()
 
@@ -65,7 +65,7 @@ class MarsRoverTest {
 
     @Test
     fun `1d space, different initial position, rotate right`() {
-        val rover = Rover(2, listOf(ROTATE_RIGHT))
+        val rover = Rover(2, listOf(ROTATE_RIGHT), Direction.NORTH)
 
         val finalPosition = rover.finalPosition()
 
@@ -74,17 +74,27 @@ class MarsRoverTest {
 
     @Test
     fun `1d space, move forward, final facing`() {
-        val rover = Rover(2, listOf(MOVE_FORWARD))
+        val rover = Rover(2, listOf(MOVE_FORWARD), Direction.NORTH)
 
         val finalPosition = rover.finalFacing()
 
         assertThat(finalPosition).isEqualTo(Direction.NORTH)
+    }
+
+    @Test
+    fun `1d space, move forward, different initial facing, final facing`() {
+        val rover = Rover(2, listOf(MOVE_FORWARD), Direction.SOUTH)
+
+        val finalPosition = rover.finalFacing()
+
+        assertThat(finalPosition).isEqualTo(Direction.SOUTH)
     }
 }
 
 class Rover(
     private val initialPosition: Int,
     private val newCommands: List<Command>,
+    private val initialDirection: Direction,
 ) {
     fun finalPosition(): Int {
         return initialPosition + positionIncrement()
@@ -94,7 +104,7 @@ class Rover(
         newCommands.map { if (it == MOVE_FORWARD) 1 else 0 }.sum()
 
     fun finalFacing(): Direction =
-        Direction.NORTH
+        initialDirection
 
 }
 
