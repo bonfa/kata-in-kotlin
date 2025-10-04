@@ -66,6 +66,10 @@ class Rover(
     private val commands: List<Int>,
 ) {
     fun finalPosition(): Int {
-        return initialPosition + (if (commands == listOf(1)) 0 else if (commands.size == 1) 1 else 2)
+        return initialPosition + positionIncrement()
     }
+
+    private fun positionIncrement(): Int =
+        commands.map { if (it == 0) 1 else 0 }.sum()
+
 }
