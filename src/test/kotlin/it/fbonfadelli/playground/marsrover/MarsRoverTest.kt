@@ -1,5 +1,7 @@
 package it.fbonfadelli.playground.marsrover
 
+import it.fbonfadelli.playground.marsrover.Command.MOVE_FORWARD
+import it.fbonfadelli.playground.marsrover.Command.ROTATE_LEFT
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -26,7 +28,7 @@ class MarsRoverTest {
 
     @Test
     fun `1d space, move forward`() {
-        val rover = Rover(0, listOf(0))
+        val rover = Rover(0, listOf(MOVE_FORWARD))
 
         val finalPosition = rover.finalPosition()
 
@@ -35,7 +37,7 @@ class MarsRoverTest {
 
     @Test
     fun `1d space, move forward twice`() {
-        val rover = Rover(0, listOf(0, 0))
+        val rover = Rover(0, listOf(MOVE_FORWARD, MOVE_FORWARD))
 
         val finalPosition = rover.finalPosition()
 
@@ -44,7 +46,7 @@ class MarsRoverTest {
 
     @Test
     fun `1d space, different initial position, move forward twice`() {
-        val rover = Rover(2, listOf(0, 0))
+        val rover = Rover(2, listOf(MOVE_FORWARD, MOVE_FORWARD))
 
         val finalPosition = rover.finalPosition()
 
@@ -53,7 +55,7 @@ class MarsRoverTest {
 
     @Test
     fun `1d space, different initial position, rotate left`() {
-        val rover = Rover(2, listOf(1))
+        val rover = Rover(2, listOf(ROTATE_LEFT))
 
         val finalPosition = rover.finalPosition()
 
@@ -63,13 +65,18 @@ class MarsRoverTest {
 
 class Rover(
     private val initialPosition: Int,
-    private val commands: List<Int>,
+    private val newCommands: List<Command>,
 ) {
     fun finalPosition(): Int {
         return initialPosition + positionIncrement()
     }
 
     private fun positionIncrement(): Int =
-        commands.map { if (it == 0) 1 else 0 }.sum()
+        newCommands.map { if (it == MOVE_FORWARD) 1 else 0 }.sum()
 
+}
+
+enum class Command {
+    MOVE_FORWARD,
+    ROTATE_LEFT,
 }
