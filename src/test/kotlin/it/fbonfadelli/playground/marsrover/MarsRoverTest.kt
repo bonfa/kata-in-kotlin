@@ -43,7 +43,7 @@ WEST                       X EAST
 
     @Test
     fun `1d space, default starting position, standard direction, move forward`() {
-        val rover = Rover(listOf(MoveForward), roverState = RoverState(0, NORTH))
+        val rover = Rover(state = RoverState(0, NORTH), commands = listOf(MoveForward))
 
         val finalState = rover.finalState()
 
@@ -52,7 +52,7 @@ WEST                       X EAST
 
     @Test
     fun `1d space, default starting position, standard direction, move forward twice`() {
-        val rover = Rover(listOf(MoveForward, MoveForward), roverState = RoverState(0, NORTH))
+        val rover = Rover(state = RoverState(0, NORTH), commands = listOf(MoveForward, MoveForward))
 
         val finalState = rover.finalState()
 
@@ -61,7 +61,7 @@ WEST                       X EAST
 
     @Test
     fun `1d space, different initial position, standard direction, move forward twice`() {
-        val rover = Rover(listOf(MoveForward, MoveForward), roverState = RoverState(2, NORTH))
+        val rover = Rover(state = RoverState(2, NORTH), commands = listOf(MoveForward, MoveForward))
 
         val finalState = rover.finalState()
 
@@ -70,7 +70,7 @@ WEST                       X EAST
 
     @Test
     fun `1d space, different initial position, standard direction, rotate left`() {
-        val rover = Rover(listOf(RotateLeft), roverState = RoverState(2, NORTH))
+        val rover = Rover(state = RoverState(2, NORTH), commands = listOf(RotateLeft))
 
         val finalState = rover.finalState()
 
@@ -79,7 +79,7 @@ WEST                       X EAST
 
     @Test
     fun `1d space, different initial position, standard direction, rotate right`() {
-        val rover = Rover(listOf(RotateRight), roverState = RoverState(2, NORTH))
+        val rover = Rover(state = RoverState(2, NORTH), commands = listOf(RotateRight))
 
         val finalState = rover.finalState()
 
@@ -88,7 +88,7 @@ WEST                       X EAST
 
     @Test
     fun `1d space, different initial position, standard direction, move forward`() {
-        val rover = Rover(listOf(MoveForward), roverState = RoverState(2, NORTH))
+        val rover = Rover(state = RoverState(2, NORTH), commands = listOf(MoveForward))
 
         val finalState = rover.finalState()
 
@@ -97,7 +97,7 @@ WEST                       X EAST
 
     @Test
     fun `1d space, different initial position, different initial direction, move forward`() {
-        val rover = Rover(listOf(MoveForward), roverState = RoverState(2, SOUTH))
+        val rover = Rover(state = RoverState(2, SOUTH), commands = listOf(MoveForward))
 
         val finalState = rover.finalState()
 
@@ -106,7 +106,7 @@ WEST                       X EAST
 
     @Test
     fun `1d space, different initial position, standard initial direction, rotate left`() {
-        val rover = Rover(listOf(RotateLeft), roverState = RoverState(2, NORTH))
+        val rover = Rover(state = RoverState(2, NORTH), commands = listOf(RotateLeft))
 
         val finalState = rover.finalState()
 
@@ -115,7 +115,7 @@ WEST                       X EAST
 
     @Test
     fun `1d space, different initial position, initial direction is WEST, rotate left`() {
-        val rover = Rover(listOf(RotateLeft), roverState = RoverState(2, WEST))
+        val rover = Rover(state = RoverState(2, WEST), commands = listOf(RotateLeft))
 
         val finalState = rover.finalState()
 
@@ -124,7 +124,7 @@ WEST                       X EAST
 
     @Test
     fun `1d space, different initial position, initial direction is SOUTH, rotate left`() {
-        val rover = Rover(listOf(RotateLeft), roverState = RoverState(2, SOUTH))
+        val rover = Rover(state = RoverState(2, SOUTH), commands = listOf(RotateLeft))
 
         val finalState = rover.finalState()
 
@@ -133,7 +133,7 @@ WEST                       X EAST
 
     @Test
     fun `1d space, different initial position, initial direction is EAST, rotate left`() {
-        val rover = Rover(listOf(RotateLeft), roverState = RoverState(2, EAST))
+        val rover = Rover(state = RoverState(2, EAST), commands = listOf(RotateLeft))
 
         val finalState = rover.finalState()
 
@@ -142,7 +142,7 @@ WEST                       X EAST
 
     @Test
     fun `1d space, different initial position, standard initial direction, rotate right`() {
-        val rover = Rover(listOf(RotateRight), roverState = RoverState(2, NORTH))
+        val rover = Rover(state = RoverState(2, NORTH), commands = listOf(RotateRight))
 
         val finalState = rover.finalState()
 
@@ -151,7 +151,7 @@ WEST                       X EAST
 
     @Test
     fun `1d space, different initial position, initial direction is WEST, rotate right`() {
-        val rover = Rover(listOf(RotateRight), roverState = RoverState(2, EAST))
+        val rover = Rover(state = RoverState(2, EAST), commands = listOf(RotateRight))
 
         val finalState = rover.finalState()
 
@@ -160,7 +160,7 @@ WEST                       X EAST
 
     @Test
     fun `1d space, different initial position, initial direction is SOUTH, rotate right`() {
-        val rover = Rover(listOf(RotateRight), roverState = RoverState(2, SOUTH))
+        val rover = Rover(state = RoverState(2, SOUTH), commands = listOf(RotateRight))
 
         val finalState = rover.finalState()
 
@@ -169,7 +169,7 @@ WEST                       X EAST
 
     @Test
     fun `1d space, different initial position, initial direction is EAST, rotate right`() {
-        val rover = Rover(listOf(RotateRight), roverState = RoverState(2, WEST))
+        val rover = Rover(state = RoverState(2, WEST), commands = listOf(RotateRight))
 
         val finalState = rover.finalState()
 
@@ -178,7 +178,7 @@ WEST                       X EAST
 
     @Test
     fun `1d space, initial direction is EAST, rotate right twice`() {
-        val rover = Rover(listOf(RotateRight, RotateRight), roverState = RoverState(2, WEST))
+        val rover = Rover(state = RoverState(2, WEST), commands = listOf(RotateRight, RotateRight))
 
         val finalState = rover.finalState()
 
@@ -187,7 +187,7 @@ WEST                       X EAST
 
     @Test
     fun `1d space, initialDirection is SOUTH, move forward`() {
-        val rover = Rover(listOf(MoveForward), roverState = RoverState(2, SOUTH))
+        val rover = Rover(state = RoverState(2, SOUTH), commands = listOf(MoveForward))
 
         val finalState = rover.finalState()
 
@@ -197,8 +197,8 @@ WEST                       X EAST
     @Test
     fun `1d space, initialDirection is SOUTH, a mix of rotations and moveForward`() {
         val rover = Rover(
-            listOf(MoveForward, RotateRight, RotateRight, MoveForward),
-            roverState = RoverState(2, SOUTH)
+            state = RoverState(2, SOUTH),
+            listOf(MoveForward, RotateRight, RotateRight, MoveForward)
         )
 
         val finalState = rover.finalState()
@@ -213,11 +213,11 @@ data class RoverState(
 )
 
 class Rover(
-    private val newCommands: List<Command>,
-    private val roverState: RoverState
+    private val state: RoverState,
+    private val commands: List<Command>
 ) {
     fun finalState(): RoverState =
-        newCommands.fold(roverState) { currentState, command ->
+        commands.fold(state) { currentState, command ->
             command.nextState(currentState)
         }
 }
