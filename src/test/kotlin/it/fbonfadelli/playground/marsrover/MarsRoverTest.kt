@@ -41,6 +41,7 @@ WEST                       X EAST
                SOUTH
      */
 
+    // MOVE FORWARD
     @Test
     fun `1d space - move forward once`() {
         val rover = Rover(state = RoverState(0, NORTH), commands = listOf(MoveForward))
@@ -69,30 +70,22 @@ WEST                       X EAST
     }
 
     @Test
-    fun `1d space - rotate left`() {
-        val rover = Rover(state = RoverState(2, NORTH), commands = listOf(RotateLeft))
-
-        val finalState = rover.finalState()
-
-        assertThat(finalState).isEqualTo(RoverState(2, WEST))
-    }
-
-    @Test
-    fun `1d space - rotate right`() {
-        val rover = Rover(state = RoverState(2, NORTH), commands = listOf(RotateRight))
-
-        val finalState = rover.finalState()
-
-        assertThat(finalState).isEqualTo(RoverState(2, EAST))
-    }
-
-    @Test
     fun `1d space - initial direction is SOUTH - move forward`() {
         val rover = Rover(state = RoverState(2, SOUTH), commands = listOf(MoveForward))
 
         val finalState = rover.finalState()
 
         assertThat(finalState).isEqualTo(RoverState(1, SOUTH))
+    }
+
+    // ROTATE LEFT
+    @Test
+    fun `1d space - initial direction is NORTH - rotate left`() {
+        val rover = Rover(state = RoverState(2, NORTH), commands = listOf(RotateLeft))
+
+        val finalState = rover.finalState()
+
+        assertThat(finalState).isEqualTo(RoverState(2, WEST))
     }
 
     @Test
@@ -122,6 +115,7 @@ WEST                       X EAST
         assertThat(finalState).isEqualTo(RoverState(2, NORTH))
     }
 
+    // ROTATE RIGHT
     @Test
     fun `1d space - initial direction is NORTH - rotate right`() {
         val rover = Rover(state = RoverState(2, NORTH), commands = listOf(RotateRight))
