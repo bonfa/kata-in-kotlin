@@ -6,6 +6,7 @@ import it.fbonfadelli.playground.marsrover.Command.RotateRight
 import it.fbonfadelli.playground.marsrover.Direction.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import kotlin.math.E
 
 class MarsRoverTest {
 
@@ -162,6 +163,15 @@ class MarsRoverTest {
 
         assertThat(finalPosition).isEqualTo(NORTH)
     }
+
+    @Test
+    fun `1d space, initial direction is EAST, rotate right twice`() {
+        val rover = Rover(2, WEST, listOf(RotateRight, RotateRight))
+
+        val finalPosition = rover.finalFacing()
+
+        assertThat(finalPosition).isEqualTo(EAST)
+    }
 }
 
 class Rover(
@@ -175,7 +185,9 @@ class Rover(
         }
 
     fun finalFacing(): Direction =
-        newCommands.first().nextDirection(initialDirection)
+        newCommands.fold(initialDirection) { currentDirection, command ->
+            command.nextDirection(currentDirection)
+        }
 }
 
 sealed interface Command {
