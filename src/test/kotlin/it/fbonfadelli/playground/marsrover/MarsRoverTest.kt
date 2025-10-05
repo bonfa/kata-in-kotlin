@@ -27,6 +27,19 @@ class MarsRoverTest {
      - map: 1D, 2 commands (forward, turn right)
      - map: 1D, 2 commands (forward, turn left)
      - map: 2D, 1 command (turn right)
+
+
+
+     SPACE
+             NORTH
+             Y |
+               |
+               |
+               |
+               |--------------->
+WEST                       X EAST
+
+               SOUTH
      */
 
     @Test
@@ -175,7 +188,7 @@ class MarsRoverTest {
 }
 
 class Rover(
-    private val initialPosition: Int,
+    private val initialPosition: Int, //Y
     private val initialDirection: Direction,
     private val newCommands: List<Command>,
 ) {
