@@ -196,7 +196,6 @@ WEST                       X EAST
     }
 
     @Test
-    @Disabled
     fun `1d space, initialDirection is SOUTH, a mix of rotations and moveForward`() {
         val rover = Rover(
             listOf(MoveForward, RotateRight, RotateRight, MoveForward),
@@ -219,19 +218,26 @@ class Rover(
     private val roverState: RoverState
 ) {
     fun finalPosition(): Int =
-        newCommands.fold(roverState) { currentState, command ->
-            command.nextPosition(currentState)
-        }.position
+        finalState().position
 
     fun finalFacing(): Direction =
-        newCommands.fold(roverState.direction) { currentDirection, command ->
-            command.nextDirection(currentDirection)
+        finalState().direction
+
+    private fun finalState(): RoverState =
+        newCommands.fold(roverState) { currentState, command ->
+            command.nextState(currentState)
         }
 }
 
 sealed interface Command {
     fun nextDirection(currentDirection: Direction): Direction
     fun nextPosition(currentState: RoverState): RoverState
+
+    fun nextState(currentState: RoverState): RoverState =
+        RoverState(
+            position = nextPosition(currentState).position,
+            direction = nextDirection(currentState.direction)
+        )
 
     data object MoveForward : Command {
         override fun nextDirection(currentDirection: Direction): Direction =
