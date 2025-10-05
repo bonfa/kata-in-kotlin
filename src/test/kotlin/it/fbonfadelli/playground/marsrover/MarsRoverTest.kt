@@ -6,38 +6,6 @@ import org.junit.jupiter.api.Test
 
 class MarsRoverTest {
 
-    /*
-    DIMENSIONS
-     - space direction (1D, 2D)
-     - facing / no facing
-     - commands (forward, turn right, turn left)
-        - 1 command at the time
-     - 1 / more commands
-     - obstacles / no obstacles
-
-     TESTS
-     - map: 1D, 1 command (forward)
-     - map: 1D, 2 commands (forward, forward)
-     - map: 1D, 1 command (turn right)
-     - map: 1D, 1 command (turn left)
-     - map: 1D, 2 commands (forward, turn right)
-     - map: 1D, 2 commands (forward, turn left)
-     - map: 2D, 1 command (turn right)
-
-
-
-     SPACE
-             NORTH
-             Y |
-               |
-               |
-               |
-               |--------------->
-WEST                       X EAST
-
-               SOUTH
-     */
-
     // MOVE FORWARD
     @Test
     fun `move forward once`() {
@@ -193,80 +161,4 @@ WEST                       X EAST
 
         assertThat(finalState).isEqualTo(RoverState(WEST, Position(-1, 2)))
     }
-}
-
-data class RoverState(
-    val direction: Direction,
-    val position: Position,
-)
-
-data class Position(
-    val x: Int,
-    val y: Int
-)
-
-class Rover(
-    private val state: RoverState,
-    private val commands: List<Command>
-) {
-    fun finalState(): RoverState =
-        commands.fold(state) { currentState, command ->
-            command.nextState(currentState)
-        }
-}
-
-sealed interface Command {
-    fun nextState(currentState: RoverState): RoverState
-}
-
-data object MoveForward : Command {
-    override fun nextState(currentState: RoverState): RoverState =
-        currentState.copy(
-            position = nextPosition(currentState),
-        )
-
-    private fun nextPosition(currentState: RoverState): Position =
-        when (currentState.direction) {
-            EAST -> currentState.position.copy(x = currentState.position.x + 1)
-            WEST -> currentState.position.copy(x = currentState.position.x - 1)
-            SOUTH -> currentState.position.copy(y = currentState.position.y - 1)
-            NORTH -> currentState.position.copy(y = currentState.position.y + 1)
-        }
-}
-
-data object RotateLeft : Command {
-    override fun nextState(currentState: RoverState): RoverState =
-        currentState.copy(
-            direction = nextDirection(currentState.direction),
-        )
-
-    private fun nextDirection(currentDirection: Direction): Direction =
-        when (currentDirection) {
-            WEST -> SOUTH
-            SOUTH -> EAST
-            EAST -> NORTH
-            NORTH -> WEST
-        }
-}
-
-data object RotateRight : Command {
-    override fun nextState(currentState: RoverState): RoverState =
-        currentState.copy(
-            direction = nextDirection(currentState.direction),
-        )
-
-    private fun nextDirection(currentDirection: Direction): Direction =
-        when (currentDirection) {
-            NORTH -> EAST
-            EAST -> SOUTH
-            SOUTH -> WEST
-            WEST -> NORTH
-        }
-}
-
-enum class Direction {
-    NORTH,
-    SOUTH,
-    EAST,
-    WEST,
 }
