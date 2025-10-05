@@ -176,21 +176,27 @@ class Rover(
     fun finalFacing(): Direction {
         val command = newCommands.first()
         return when (command) {
-            ROTATE_LEFT -> when (initialDirection) {
-                WEST -> SOUTH
-                SOUTH -> EAST
-                EAST -> NORTH
-                NORTH -> WEST
-            }
-            ROTATE_RIGHT -> when (initialDirection) {
-                NORTH -> EAST
-                EAST -> SOUTH
-                SOUTH -> WEST
-                WEST -> NORTH
-            }
+            ROTATE_LEFT -> rotateLeft(initialDirection)
+            ROTATE_RIGHT -> rotateRight(initialDirection)
             MOVE_FORWARD -> initialDirection
         }
     }
+
+    private fun rotateRight(currentDirection: Direction): Direction =
+        when (currentDirection) {
+            NORTH -> EAST
+            EAST -> SOUTH
+            SOUTH -> WEST
+            WEST -> NORTH
+        }
+
+    private fun rotateLeft(currentDirection: Direction): Direction =
+        when (currentDirection) {
+            WEST -> SOUTH
+            SOUTH -> EAST
+            EAST -> NORTH
+            NORTH -> WEST
+        }
 
     private fun positionIncrement(): Int =
         newCommands.map { if (it == MOVE_FORWARD) 1 else 0 }.sum()
