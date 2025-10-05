@@ -199,7 +199,7 @@ WEST                       X EAST
 }
 
 data class RoverState(
-    val position: Int, //Y
+    val y: Int, //Y
     val direction: Direction,
     val x: Int,
 )
@@ -221,7 +221,7 @@ sealed interface Command {
     fun nextState(currentState: RoverState): RoverState {
         val nextPosition = nextPosition(currentState)
         return RoverState(
-            position = nextPosition.position,
+            y = nextPosition.y,
             direction = nextDirection(currentState.direction),
             x = nextPosition.x,
         )
@@ -235,8 +235,8 @@ sealed interface Command {
             when (currentState.direction) {
                 EAST -> currentState.copy(x = currentState.x + 1)
                 WEST -> currentState.copy(x = currentState.x - 1)
-                SOUTH -> currentState.copy(position = currentState.position - 1)
-                NORTH -> currentState.copy(position = currentState.position + 1)
+                SOUTH -> currentState.copy(y = currentState.y - 1)
+                NORTH -> currentState.copy(y = currentState.y + 1)
             }
     }
 
