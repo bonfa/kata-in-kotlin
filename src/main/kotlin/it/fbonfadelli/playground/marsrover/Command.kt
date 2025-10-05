@@ -1,25 +1,5 @@
 package it.fbonfadelli.playground.marsrover
 
-data class RoverState(
-    val direction: Direction,
-    val position: Position,
-)
-
-data class Position(
-    val x: Int,
-    val y: Int
-)
-
-class Rover(
-    private val state: RoverState,
-    private val commands: List<Command>
-) {
-    fun finalState(): RoverState =
-        commands.fold(state) { currentState, command ->
-            command.nextState(currentState)
-        }
-}
-
 sealed interface Command {
     fun nextState(currentState: RoverState): RoverState
 }
@@ -67,11 +47,4 @@ data object RotateRight : Command {
             Direction.SOUTH -> Direction.WEST
             Direction.WEST -> Direction.NORTH
         }
-}
-
-enum class Direction {
-    NORTH,
-    SOUTH,
-    EAST,
-    WEST,
 }
