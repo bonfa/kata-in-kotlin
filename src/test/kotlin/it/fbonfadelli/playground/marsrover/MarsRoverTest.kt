@@ -1,8 +1,5 @@
 package it.fbonfadelli.playground.marsrover
 
-import it.fbonfadelli.playground.marsrover.Command.MoveForward
-import it.fbonfadelli.playground.marsrover.Command.RotateLeft
-import it.fbonfadelli.playground.marsrover.Command.RotateRight
 import it.fbonfadelli.playground.marsrover.Direction.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -220,57 +217,51 @@ class Rover(
 
 sealed interface Command {
     fun nextState(currentState: RoverState): RoverState
+}
 
-    data object MoveForward : Command {
-        override fun nextState(currentState: RoverState): RoverState =
-            RoverState(
-                direction = nextDirection(currentState.direction),
-                position = nextPosition(currentState),
-            )
+data object MoveForward : Command {
+    override fun nextState(currentState: RoverState): RoverState =
+        currentState.copy(
+            position = nextPosition(currentState),
+        )
 
-        private fun nextDirection(currentDirection: Direction): Direction =
-            currentDirection
+    private fun nextPosition(currentState: RoverState): Position =
+        when (currentState.direction) {
+            EAST -> currentState.position.copy(x = currentState.position.x + 1)
+            WEST -> currentState.position.copy(x = currentState.position.x - 1)
+            SOUTH -> currentState.position.copy(y = currentState.position.y - 1)
+            NORTH -> currentState.position.copy(y = currentState.position.y + 1)
+        }
+}
 
-        private fun nextPosition(currentState: RoverState): Position =
-            when (currentState.direction) {
-                EAST -> currentState.position.copy(x = currentState.position.x + 1)
-                WEST -> currentState.position.copy(x = currentState.position.x - 1)
-                SOUTH -> currentState.position.copy(y = currentState.position.y - 1)
-                NORTH -> currentState.position.copy(y = currentState.position.y + 1)
-            }
-    }
+data object RotateLeft : Command {
+    override fun nextState(currentState: RoverState): RoverState =
+        currentState.copy(
+            direction = nextDirection(currentState.direction),
+        )
 
-    data object RotateLeft : Command {
-        override fun nextState(currentState: RoverState): RoverState =
-            RoverState(
-                direction = nextDirection(currentState.direction),
-                position = currentState.position,
-            )
+    private fun nextDirection(currentDirection: Direction): Direction =
+        when (currentDirection) {
+            WEST -> SOUTH
+            SOUTH -> EAST
+            EAST -> NORTH
+            NORTH -> WEST
+        }
+}
 
-        private fun nextDirection(currentDirection: Direction): Direction =
-            when (currentDirection) {
-                WEST -> SOUTH
-                SOUTH -> EAST
-                EAST -> NORTH
-                NORTH -> WEST
-            }
-    }
+data object RotateRight : Command {
+    override fun nextState(currentState: RoverState): RoverState =
+        currentState.copy(
+            direction = nextDirection(currentState.direction),
+        )
 
-    data object RotateRight : Command {
-        override fun nextState(currentState: RoverState): RoverState =
-            RoverState(
-                direction = nextDirection(currentState.direction),
-                position = currentState.position,
-            )
-
-        private fun nextDirection(currentDirection: Direction): Direction =
-            when (currentDirection) {
-                NORTH -> EAST
-                EAST -> SOUTH
-                SOUTH -> WEST
-                WEST -> NORTH
-            }
-    }
+    private fun nextDirection(currentDirection: Direction): Direction =
+        when (currentDirection) {
+            NORTH -> EAST
+            EAST -> SOUTH
+            SOUTH -> WEST
+            WEST -> NORTH
+        }
 }
 
 enum class Direction {
