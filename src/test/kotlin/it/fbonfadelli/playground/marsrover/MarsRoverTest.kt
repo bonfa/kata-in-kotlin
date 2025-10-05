@@ -172,11 +172,24 @@ WEST                       X EAST
 
         assertThat(finalState).isEqualTo(RoverState(2, NORTH))
     }
+
+    @Test
+    fun `2d space`() {
+        val rover = Rover(
+            state = RoverState(2, EAST, 0),
+            listOf(MoveForward)
+        )
+
+        val finalState = rover.finalState()
+
+        assertThat(finalState).isEqualTo(RoverState(2, EAST, 1))
+    }
 }
 
 data class RoverState(
     val position: Int, //Y
     val direction: Direction,
+    val x: Int = 0,
 )
 
 class Rover(
@@ -193,18 +206,23 @@ sealed interface Command {
     fun nextDirection(currentDirection: Direction): Direction
     fun nextPosition(currentState: RoverState): RoverState
 
-    fun nextState(currentState: RoverState): RoverState =
-        RoverState(
-            position = nextPosition(currentState).position,
-            direction = nextDirection(currentState.direction)
+    fun nextState(currentState: RoverState): RoverState {
+        val nextPosition = nextPosition(currentState)
+        return RoverState(
+            position = nextPosition.position,
+            direction = nextDirection(currentState.direction),
+            x = nextPosition.x,
         )
+    }
 
     data object MoveForward : Command {
         override fun nextDirection(currentDirection: Direction): Direction =
             currentDirection
 
         override fun nextPosition(currentState: RoverState): RoverState =
-            if (currentState.direction == SOUTH)
+            if (currentState.direction == EAST)
+                currentState.copy(x = currentState.x + 1)
+            else if (currentState.direction == SOUTH)
                 currentState.copy(position = currentState.position - 1)
             else
                 currentState.copy(position = currentState.position + 1)
