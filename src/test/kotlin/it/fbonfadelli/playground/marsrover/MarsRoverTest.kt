@@ -6,7 +6,6 @@ import it.fbonfadelli.playground.marsrover.Command.RotateRight
 import it.fbonfadelli.playground.marsrover.Direction.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import kotlin.math.E
 
 class MarsRoverTest {
 
@@ -91,99 +90,99 @@ WEST                       X EAST
     fun `1d space, different initial position, standard direction, move forward`() {
         val rover = Rover(2, NORTH, listOf(MoveForward))
 
-        val finalPosition = rover.finalFacing()
+        val finalFacing = rover.finalFacing()
 
-        assertThat(finalPosition).isEqualTo(NORTH)
+        assertThat(finalFacing).isEqualTo(NORTH)
     }
 
     @Test
     fun `1d space, different initial position, different initial direction, move forward`() {
         val rover = Rover(2, SOUTH, listOf(MoveForward))
 
-        val finalPosition = rover.finalFacing()
+        val finalFacing = rover.finalFacing()
 
-        assertThat(finalPosition).isEqualTo(SOUTH)
+        assertThat(finalFacing).isEqualTo(SOUTH)
     }
 
     @Test
     fun `1d space, different initial position, standard initial direction, rotate left`() {
         val rover = Rover(2, NORTH, listOf(RotateLeft))
 
-        val finalPosition = rover.finalFacing()
+        val finalFacing = rover.finalFacing()
 
-        assertThat(finalPosition).isEqualTo(WEST)
+        assertThat(finalFacing).isEqualTo(WEST)
     }
 
     @Test
     fun `1d space, different initial position, initial direction is WEST, rotate left`() {
         val rover = Rover(2, WEST, listOf(RotateLeft))
 
-        val finalPosition = rover.finalFacing()
+        val finalFacing = rover.finalFacing()
 
-        assertThat(finalPosition).isEqualTo(SOUTH)
+        assertThat(finalFacing).isEqualTo(SOUTH)
     }
 
     @Test
     fun `1d space, different initial position, initial direction is SOUTH, rotate left`() {
         val rover = Rover(2, SOUTH, listOf(RotateLeft))
 
-        val finalPosition = rover.finalFacing()
+        val finalFacing = rover.finalFacing()
 
-        assertThat(finalPosition).isEqualTo(EAST)
+        assertThat(finalFacing).isEqualTo(EAST)
     }
 
     @Test
     fun `1d space, different initial position, initial direction is EAST, rotate left`() {
         val rover = Rover(2, EAST, listOf(RotateLeft))
 
-        val finalPosition = rover.finalFacing()
+        val finalFacing = rover.finalFacing()
 
-        assertThat(finalPosition).isEqualTo(NORTH)
+        assertThat(finalFacing).isEqualTo(NORTH)
     }
 
     @Test
     fun `1d space, different initial position, standard initial direction, rotate right`() {
         val rover = Rover(2, NORTH, listOf(RotateRight))
 
-        val finalPosition = rover.finalFacing()
+        val finalFacing = rover.finalFacing()
 
-        assertThat(finalPosition).isEqualTo(EAST)
+        assertThat(finalFacing).isEqualTo(EAST)
     }
 
     @Test
     fun `1d space, different initial position, initial direction is WEST, rotate right`() {
         val rover = Rover(2, EAST, listOf(RotateRight))
 
-        val finalPosition = rover.finalFacing()
+        val finalFacing = rover.finalFacing()
 
-        assertThat(finalPosition).isEqualTo(SOUTH)
+        assertThat(finalFacing).isEqualTo(SOUTH)
     }
 
     @Test
     fun `1d space, different initial position, initial direction is SOUTH, rotate right`() {
         val rover = Rover(2, SOUTH, listOf(RotateRight))
 
-        val finalPosition = rover.finalFacing()
+        val finalFacing = rover.finalFacing()
 
-        assertThat(finalPosition).isEqualTo(WEST)
+        assertThat(finalFacing).isEqualTo(WEST)
     }
 
     @Test
     fun `1d space, different initial position, initial direction is EAST, rotate right`() {
         val rover = Rover(2, Direction.WEST, listOf(RotateRight))
 
-        val finalPosition = rover.finalFacing()
+        val finalFacing = rover.finalFacing()
 
-        assertThat(finalPosition).isEqualTo(NORTH)
+        assertThat(finalFacing).isEqualTo(NORTH)
     }
 
     @Test
     fun `1d space, initial direction is EAST, rotate right twice`() {
         val rover = Rover(2, WEST, listOf(RotateRight, RotateRight))
 
-        val finalPosition = rover.finalFacing()
+        val finalFacing = rover.finalFacing()
 
-        assertThat(finalPosition).isEqualTo(EAST)
+        assertThat(finalFacing).isEqualTo(EAST)
     }
 }
 
