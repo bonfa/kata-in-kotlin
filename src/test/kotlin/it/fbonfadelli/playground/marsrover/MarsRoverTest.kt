@@ -161,4 +161,52 @@ class MarsRoverTest {
 
         assertThat(finalState).isEqualTo(RoverState(WEST, Position(-1, 2)))
     }
+
+    @Test
+    fun `complex path - 1`() {
+        val rover = Rover(
+            state = RoverState(NORTH, Position(0, 0)),
+            commands = listOf(
+                MoveForward,
+                MoveForward,
+                RotateRight,
+                MoveForward,
+                MoveForward,
+                RotateRight,
+                MoveForward,
+                MoveForward,
+                RotateRight,
+                MoveForward,
+                MoveForward,
+                RotateRight
+                )
+        )
+
+        val finalState = rover.finalState()
+
+        assertThat(finalState).isEqualTo(RoverState(NORTH, Position(0, 0)))
+    }
+
+    @Test
+    fun `complex path - 2`() {
+        val rover = Rover(
+            state = RoverState(NORTH, Position(0, 0)),
+            commands = listOf(
+                MoveForward,
+                RotateRight,
+                MoveForward,
+                RotateLeft,
+                MoveForward,
+                RotateRight,
+                MoveForward,
+                RotateLeft,
+                MoveForward,
+                RotateRight
+            )
+        )
+
+        val finalState = rover.finalState()
+
+        assertThat(finalState).isEqualTo(RoverState(Direction.EAST, Position(2, 3)))
+    }
 }
