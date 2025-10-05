@@ -174,7 +174,7 @@ WEST                       X EAST
     }
 
     @Test
-    fun `2d space`() {
+    fun `2d space - move forward towards EAST`() {
         val rover = Rover(
             state = RoverState(2, EAST, 0),
             listOf(MoveForward)
