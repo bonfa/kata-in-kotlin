@@ -47,7 +47,7 @@ WEST                       X EAST
 
         val finalState = rover.finalState()
 
-        assertThat(finalState.position).isEqualTo(1)
+        assertThat(finalState).isEqualTo(RoverState(1, NORTH))
     }
 
     @Test
@@ -56,7 +56,7 @@ WEST                       X EAST
 
         val finalState = rover.finalState()
 
-        assertThat(finalState.position).isEqualTo(2)
+        assertThat(finalState).isEqualTo(RoverState(2, NORTH))
     }
 
     @Test
@@ -65,7 +65,7 @@ WEST                       X EAST
 
         val finalState = rover.finalState()
 
-        assertThat(finalState.position).isEqualTo(4)
+        assertThat(finalState).isEqualTo(RoverState(4, NORTH))
     }
 
     @Test
@@ -74,7 +74,7 @@ WEST                       X EAST
 
         val finalState = rover.finalState()
 
-        assertThat(finalState.position).isEqualTo(2)
+        assertThat(finalState).isEqualTo(RoverState(2, WEST))
     }
 
     @Test
@@ -83,7 +83,7 @@ WEST                       X EAST
 
         val finalState = rover.finalState()
 
-        assertThat(finalState.position).isEqualTo(2)
+        assertThat(finalState).isEqualTo(RoverState(2, EAST))
     }
 
     @Test
@@ -92,7 +92,7 @@ WEST                       X EAST
 
         val finalState = rover.finalState()
 
-        assertThat(finalState.direction).isEqualTo(NORTH)
+        assertThat(finalState).isEqualTo(RoverState(3, NORTH))
     }
 
     @Test
@@ -101,7 +101,7 @@ WEST                       X EAST
 
         val finalState = rover.finalState()
 
-        assertThat(finalState.direction).isEqualTo(SOUTH)
+        assertThat(finalState).isEqualTo(RoverState(1, SOUTH))
     }
 
     @Test
@@ -110,7 +110,7 @@ WEST                       X EAST
 
         val finalState = rover.finalState()
 
-        assertThat(finalState.direction).isEqualTo(WEST)
+        assertThat(finalState).isEqualTo(RoverState(2, WEST))
     }
 
     @Test
@@ -119,7 +119,7 @@ WEST                       X EAST
 
         val finalState = rover.finalState()
 
-        assertThat(finalState.direction).isEqualTo(SOUTH)
+        assertThat(finalState).isEqualTo(RoverState(2, SOUTH))
     }
 
     @Test
@@ -128,7 +128,7 @@ WEST                       X EAST
 
         val finalState = rover.finalState()
 
-        assertThat(finalState.direction).isEqualTo(EAST)
+        assertThat(finalState).isEqualTo(RoverState(2, EAST))
     }
 
     @Test
@@ -137,7 +137,7 @@ WEST                       X EAST
 
         val finalState = rover.finalState()
 
-        assertThat(finalState.direction).isEqualTo(NORTH)
+        assertThat(finalState).isEqualTo(RoverState(2, NORTH))
     }
 
     @Test
@@ -146,7 +146,7 @@ WEST                       X EAST
 
         val finalState = rover.finalState()
 
-        assertThat(finalState.direction).isEqualTo(EAST)
+        assertThat(finalState).isEqualTo(RoverState(2, EAST))
     }
 
     @Test
@@ -155,7 +155,7 @@ WEST                       X EAST
 
         val finalState = rover.finalState()
 
-        assertThat(finalState.direction).isEqualTo(SOUTH)
+        assertThat(finalState).isEqualTo(RoverState(2, SOUTH))
     }
 
     @Test
@@ -164,7 +164,7 @@ WEST                       X EAST
 
         val finalState = rover.finalState()
 
-        assertThat(finalState.direction).isEqualTo(WEST)
+        assertThat(finalState).isEqualTo(RoverState(2, WEST))
     }
 
     @Test
@@ -173,7 +173,7 @@ WEST                       X EAST
 
         val finalState = rover.finalState()
 
-        assertThat(finalState.direction).isEqualTo(NORTH)
+        assertThat(finalState).isEqualTo(RoverState(2, NORTH))
     }
 
     @Test
@@ -182,7 +182,7 @@ WEST                       X EAST
 
         val finalState = rover.finalState()
 
-        assertThat(finalState.direction).isEqualTo(EAST)
+        assertThat(finalState).isEqualTo(RoverState(2, EAST))
     }
 
     @Test
@@ -191,7 +191,7 @@ WEST                       X EAST
 
         val finalState = rover.finalState()
 
-        assertThat(finalState.position).isEqualTo(1)
+        assertThat(finalState).isEqualTo(RoverState(1, SOUTH))
     }
 
     @Test
@@ -203,7 +203,7 @@ WEST                       X EAST
 
         val finalState = rover.finalState()
 
-        assertThat(finalState.position).isEqualTo(2)
+        assertThat(finalState).isEqualTo(RoverState(2, NORTH))
     }
 }
 
