@@ -169,24 +169,25 @@ class Rover(
     private val initialDirection: Direction,
     private val newCommands: List<Command>,
 ) {
-    fun finalPosition(): Int {
-        return initialPosition + positionIncrement()
-    }
+    fun finalPosition(): Int =
+        newCommands.fold(initialPosition) { currentPosition, command ->
+            command.nextPosition(currentPosition)
+        }
 
     fun finalFacing(): Direction =
         newCommands.first().nextDirection(initialDirection)
-
-    private fun positionIncrement(): Int =
-        newCommands.map { if (it == MoveForward) 1 else 0 }.sum()
-
 }
 
 sealed interface Command {
     fun nextDirection(currentDirection: Direction): Direction
+    fun nextPosition(currentPosition: Int): Int
 
     data object MoveForward : Command {
         override fun nextDirection(currentDirection: Direction): Direction =
             currentDirection
+
+        override fun nextPosition(currentPosition: Int): Int =
+            currentPosition + 1
     }
 
     data object RotateLeft : Command {
@@ -197,6 +198,9 @@ sealed interface Command {
                 EAST -> NORTH
                 NORTH -> WEST
             }
+
+        override fun nextPosition(currentPosition: Int): Int =
+            currentPosition
     }
 
     data object RotateRight : Command {
@@ -207,6 +211,9 @@ sealed interface Command {
                 SOUTH -> WEST
                 WEST -> NORTH
             }
+
+        override fun nextPosition(currentPosition: Int): Int =
+            currentPosition
     }
 }
 
