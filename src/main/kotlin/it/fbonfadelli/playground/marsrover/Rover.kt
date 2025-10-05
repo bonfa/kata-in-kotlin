@@ -1,16 +1,16 @@
 package it.fbonfadelli.playground.marsrover
 
 class Rover(
-    private val state: RoverState,
+    private val state: State,
     private val commands: List<Command>
 ) {
-    fun finalState(): RoverState =
+    fun finalState(): State =
         commands.fold(state) { currentState, command ->
             command.nextState(currentState)
         }
 }
 
-data class RoverState(
+data class State(
     val direction: Direction,
     val position: Position,
 )
