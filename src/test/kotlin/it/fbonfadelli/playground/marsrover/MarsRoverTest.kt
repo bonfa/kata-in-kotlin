@@ -4,6 +4,7 @@ import it.fbonfadelli.playground.marsrover.Command.MoveForward
 import it.fbonfadelli.playground.marsrover.Command.RotateLeft
 import it.fbonfadelli.playground.marsrover.Command.RotateRight
 import it.fbonfadelli.playground.marsrover.Direction.*
+import jdk.internal.foreign.abi.Binding
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -184,6 +185,15 @@ WEST                       X EAST
 
         assertThat(finalFacing).isEqualTo(EAST)
     }
+
+    @Test
+    fun `1d space, initialDirection is SOUTH, move forward`() {
+        val rover = Rover(2, SOUTH, listOf(MoveForward))
+
+        val finalPosition = rover.finalPosition()
+
+        assertThat(finalPosition).isEqualTo(1)
+    }
 }
 
 class Rover(
@@ -193,7 +203,7 @@ class Rover(
 ) {
     fun finalPosition(): Int =
         newCommands.fold(initialPosition) { currentPosition, command ->
-            command.nextPosition(currentPosition)
+            command.nextPosition(currentPosition, initialDirection)
         }
 
     fun finalFacing(): Direction =
@@ -204,14 +214,17 @@ class Rover(
 
 sealed interface Command {
     fun nextDirection(currentDirection: Direction): Direction
-    fun nextPosition(currentPosition: Int): Int
+    fun nextPosition(currentPosition: Int, currentDirection: Direction): Int
 
     data object MoveForward : Command {
         override fun nextDirection(currentDirection: Direction): Direction =
             currentDirection
 
-        override fun nextPosition(currentPosition: Int): Int =
-            currentPosition + 1
+        override fun nextPosition(currentPosition: Int, currentDirection: Direction): Int =
+            if (currentDirection == SOUTH)
+                currentPosition - 1
+            else
+                currentPosition + 1
     }
 
     data object RotateLeft : Command {
@@ -223,7 +236,7 @@ sealed interface Command {
                 NORTH -> WEST
             }
 
-        override fun nextPosition(currentPosition: Int): Int =
+        override fun nextPosition(currentPosition: Int, currentDirection: Direction): Int =
             currentPosition
     }
 
@@ -236,7 +249,7 @@ sealed interface Command {
                 WEST -> NORTH
             }
 
-        override fun nextPosition(currentPosition: Int): Int =
+        override fun nextPosition(currentPosition: Int, currentDirection: Direction): Int =
             currentPosition
     }
 }
