@@ -219,20 +219,19 @@ class Rover(
 }
 
 sealed interface Command {
-    fun nextDirection(currentDirection: Direction): Direction
-    fun nextPosition(currentState: RoverState): Position
-
-    fun nextState(currentState: RoverState): RoverState =
-        RoverState(
-            direction = nextDirection(currentState.direction),
-            position = nextPosition(currentState),
-        )
+    fun nextState(currentState: RoverState): RoverState
 
     data object MoveForward : Command {
-        override fun nextDirection(currentDirection: Direction): Direction =
+        override fun nextState(currentState: RoverState): RoverState =
+            RoverState(
+                direction = nextDirection(currentState.direction),
+                position = nextPosition(currentState),
+            )
+
+        private fun nextDirection(currentDirection: Direction): Direction =
             currentDirection
 
-        override fun nextPosition(currentState: RoverState): Position =
+        private fun nextPosition(currentState: RoverState): Position =
             when (currentState.direction) {
                 EAST -> currentState.position.copy(x = currentState.position.x + 1)
                 WEST -> currentState.position.copy(x = currentState.position.x - 1)
@@ -242,29 +241,35 @@ sealed interface Command {
     }
 
     data object RotateLeft : Command {
-        override fun nextDirection(currentDirection: Direction): Direction =
+        override fun nextState(currentState: RoverState): RoverState =
+            RoverState(
+                direction = nextDirection(currentState.direction),
+                position = currentState.position,
+            )
+
+        private fun nextDirection(currentDirection: Direction): Direction =
             when (currentDirection) {
                 WEST -> SOUTH
                 SOUTH -> EAST
                 EAST -> NORTH
                 NORTH -> WEST
             }
-
-        override fun nextPosition(currentState: RoverState): Position =
-            currentState.position
     }
 
     data object RotateRight : Command {
-        override fun nextDirection(currentDirection: Direction): Direction =
+        override fun nextState(currentState: RoverState): RoverState =
+            RoverState(
+                direction = nextDirection(currentState.direction),
+                position = currentState.position,
+            )
+
+        private fun nextDirection(currentDirection: Direction): Direction =
             when (currentDirection) {
                 NORTH -> EAST
                 EAST -> SOUTH
                 SOUTH -> WEST
                 WEST -> NORTH
             }
-
-        override fun nextPosition(currentState: RoverState): Position =
-            currentState.position
     }
 }
 
